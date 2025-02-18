@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل بيانات الموظفين</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        .form-container input, .form-container button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .form-container button {
+            cursor: pointer;
+        }
+        .edit-btn, .delete-btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>تسجيل بيانات الموظفين</h1>
+    <div class="form-container">
+        <input type="text" id="name" placeholder="الاسم" required>
+        <input type="text" id="residenceNumber" placeholder="رقم الإقامة" required>
+        <input type="date" id="residenceExpiry" placeholder="تاريخ انتهاء الإقامة" required>
+        <input type="number" id="residenceRemainingDays" placeholder="المدة المتبقية لانتهاء الإقامة (باليوم)" readonly>
+        <select id="residenceStatus" required disabled>
+            <option value="سارية">سارية</option>
+            <option value="منتهية">منتهية</option>
+        </select>
+        <input type="date" id="insuranceExpiry" placeholder="تاريخ انتهاء التأمين الطبي" required>
+        <input type="number" id="insuranceRemainingDays" placeholder="المدة المتبقية لانتهاء التأمين الطبي (باليوم)" readonly>
+        <button onclick="addOrUpdateEmployee()">إضافة/تحديث</button>
+    </div>
+
+    <table id="employeeTable">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>رقم الإقامة</th>
+                <th>تاريخ انتهاء الإقامة</th>
+                <th>المدة المتبقية لانتهاء الإقامة (باليوم)</th>
+                <th>حالة الإقامة</th>
+                <th>تاريخ انتهاء التأمين الطبي</th>
+                <th>المدة المتبقية لانتهاء التأمين الطبي (باليوم)</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        let employees = [];
+        let editingIndex = -1;
+
+        // Load data from localStorage on page load
+        function loadData() {
+            const savedData = localStorage.getItem('employees');
+            if (savedData) {
+                employees = JSON.parse(savedData);
+                renderTable();
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('employees', JSON.stringify(employees));
+        }
+
+        function calculateRemainingDays(expiryDate) {
+            const today = new Date();
+            const expiry = new Date(expiryDate);
+            const timeDiff = expiry - today;
+            return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        }
+
+        function updateRemainingDays() {
+            const residenceRemainingDays = calculateRemainingDays(document.getElementById('residenceExpiry').value);
+            document.getElementById('residenceRemainingDays').value = residenceRemainingDays;
+
+            const insuranceRemainingDays = calculateRemainingDays(document.getElementById('insuranceExpiry').value);
+            document.getElementById('insuranceRemainingDays').value = insuranceRemainingDays;
+
+            // Automatically set the residence status based on remaining days
+            const residenceStatus = residenceRemainingDays <= 7 ? 'منتهية' : 'سارية';
+            document.getElementById('residenceStatus').value = residenceStatus;
+        }
+
+        document.getElementById('residenceExpiry').addEventListener('change', updateRemainingDays);
+        document.getElementById('insuranceExpiry').addEventListener('change', updateRemainingDays);
+
+        function addOrUpdateEmployee() {
+            const name = document.getElementById('name').value;
+            const residenceNumber = document.getElementById('residenceNumber').value;
+            const residenceExpiry = document.getElementById('residenceExpiry').value;
+            const residenceRemainingDays = document.getElementById('residenceRemainingDays').value;
+            const residenceStatus = document.getElementById('residenceStatus').value;
+            const insuranceExpiry = document.getElementById('insuranceExpiry').value;
+            const insuranceRemainingDays = document.getElementById('insuranceRemainingDays').value;
+
+            if (!name || !residenceNumber || !residenceExpiry || !insuranceExpiry) {
+                alert('يرجى تعبئة جميع الحقول المطلوبة.');
+                return;
+            }
+
+            const employee = {
+                name,
+                residenceNumber,
+                residenceExpiry,
+                residenceRemainingDays,
+                residenceStatus,
+                insuranceExpiry,
+                insuranceRemainingDays
+            };
+
+            if (editingIndex === -1) {
+                employees.push(employee);
+            } else {
+                employees[editingIndex] = employee;
+                editingIndex = -1;
+            }
+
+            renderTable();
+            clearForm();
+            saveData(); // Save data to localStorage
+        }
+
+        function renderTable() {
+            const tbody = document.querySelector('#employeeTable tbody');
+            tbody.innerHTML = '';
+            employees.forEach((emp, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.name}</td>
+                    <td>${emp.residenceNumber}</td>
+                    <td>${emp.residenceExpiry}</td>
+                    <td>${emp.residenceRemainingDays}</td>
+                    <td>${emp.residenceStatus}</td>
+                    <td>${emp.insuranceExpiry}</td>
+                    <td>${emp.insuranceRemainingDays}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editEmployee(${index})">تعديل</button>
+                        <button class="delete-btn" onclick="deleteEmployee(${index})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function editEmployee(index) {
+            const emp = employees[index];
+            document.getElementById('name').value = emp.name;
+            document.getElementById('residenceNumber').value = emp.residenceNumber;
+            document.getElementById('residenceExpiry').value = emp.residenceExpiry;
+            document.getElementById('residenceRemainingDays').value = emp.residenceRemainingDays;
+            document.getElementById('residenceStatus').value = emp.residenceStatus;
+            document.getElementById('insuranceExpiry').value = emp.insuranceExpiry;
+            document.getElementById('insuranceRemainingDays').value = emp.insuranceRemainingDays;
+            editingIndex = index;
+        }
+
+        function deleteEmployee(index) {
+            employees.splice(index, 1);
+            renderTable();
+            saveData(); // Save data to localStorage
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('residenceNumber').value = '';
+            document.getElementById('residenceExpiry').value = '';
+            document.getElementById('residenceRemainingDays').value = '';
+            document.getElementById('residenceStatus').value = 'سارية';
+            document.getElementById('insuranceExpiry').value = '';
+            document.getElementById('insuranceRemainingDays').value = '';
+        }
+
+        // Load data when the page loads
+        loadData();
+    </script>
+</body>
+</html>
