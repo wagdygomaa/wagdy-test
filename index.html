@@ -2,183 +2,225 @@
 <html lang="ar" dir="rtl">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متابعة اقامات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Almarai', sans-serif;
-            margin: 20px;
-            background-color: #f0f0f0;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل بيانات الموظفين</title>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Almarai', sans-serif;
+      margin: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
 
-        th {
-            background-color: #ad486a;
-            color: white;
-        }
+    th {
+      background-color: #ad486a;
+      color: white;
+    }
 
-        .status-expired {
-            background-color: #ffcccc;
-            color: #d32f2f;
-        }
+    .status-expired {
+      background-color: #ffcccc;
+      color: #d32f2f;
+    }
 
-        .status-soon {
-            background-color: #fff0b3;
-            color: #f57c00;
-        }
+    .status-soon {
+      background-color: #fff0b3;
+      color: #f57c00;
+    }
 
-        .status-active {
-            background-color: #ccffcc;
-            color: #388e3c;
-        }
+    .status-active {
+      background-color: #ccffcc;
+      color: #388e3c;
+    }
 
-        input[type="text"],
-        input[type="date"],
-        select {
-            padding: 10px;
-            margin: 5px 0;
-            border: 2px solid #ad486a;
-            border-radius: 4px;
-            width: calc(100% - 22px);
-            box-sizing: border-box;
-            font-family: 'Almarai', sans-serif;
-        }
+    input[type="text"],
+    input[type="date"],
+    select {
+      padding: 10px;
+      margin: 5px 0;
+      border: 2px solid #ad486a;
+      border-radius: 4px;
+      width: calc(100% - 22px);
+      box-sizing: border-box;
+      font-family: 'Almarai', sans-serif;
+    }
 
-        button {
-            padding: 10px 20px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 4px;
-            background-color: #ad486a;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
+    button {
+      padding: 10px 20px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 4px;
+      background-color: #ad486a;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #8c3b57;
-        }
+    button:hover {
+      background-color: #8c3b57;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .hidden {
+      display: none;
+    }
 
-        h1,
-        h2,
-        h3 {
-            color: #ad486a;
-        }
+    h1,
+    h2,
+    h3 {
+      color: #ad486a;
+    }
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 20px auto;
-            border: 2px solid #ad486a;
-        }
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 20px auto;
+      border: 2px solid #ad486a;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
 
-        .memphis-pattern {
-            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
-        }
+    .memphis-pattern {
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+    }
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            body {
-                margin: 10px;
-            }
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      body {
+        margin: 10px;
+      }
 
-            table {
-                font-size: 14px;
-            }
+      table {
+        font-size: 14px;
+      }
 
-            th,
-            td {
-                padding: 8px;
-            }
+      th,
+      td {
+        padding: 8px;
+      }
 
-            input[type="text"],
-            input[type="date"],
-            select {
-                width: calc(100% - 20px);
-            }
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: calc(100% - 20px);
+      }
 
-            button {
-                width: 100%;
-                padding: 10px;
-            }
+      button {
+        width: 100%;
+        padding: 10px;
+      }
 
-            form {
-                padding: 15px;
-                margin: 10px auto;
-            }
+      form {
+        padding: 15px;
+        margin: 10px auto;
+      }
 
-            h1 {
-                font-size: 24px;
-            }
+      h1 {
+        font-size: 24px;
+      }
 
-            h2 {
-                font-size: 20px;
-            }
+      h2 {
+        font-size: 20px;
+      }
 
-            h3 {
-                font-size: 18px;
-            }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+      h3 {
+        font-size: 18px;
+      }
+    }
+
+    #loginForm {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    #loginForm input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid #ad486a;
+      border-radius: 4px;
+      direction: ltr;
+    }
+
+    #mainContent.hidden,
+    #loginForm.hidden {
+      display: none;
+    }
+
+    .logout-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 
 <body class="memphis-pattern">
-    <h1>متابعة اقامات موظفين الحربش</h1>
+  <div id="loginForm">
+    <h2>تسجيل الدخول</h2>
+    <form id="authForm">
+      <label>البريد الإلكتروني: <input type="email" id="email" required></label><br>
+      <label>كلمة المرور: <input type="password" id="password" required></label><br>
+      <button type="submit">دخول</button>
+    </form>
+  </div>
+
+  <div id="mainContent" class="hidden">
+    <button class="logout-button" id="logoutButton">تسجيل خروج</button>
+    <h1>تسجيل بيانات الموظفين</h1>
     <button id="showFormButton">إضافة موظف جديد</button>
     <button id="importButton">استيراد بيانات</button>
     <button id="exportButton">تصدير البيانات</button>
     <a href="نموذج_الموظفين.xlsx" download="نموذج_الموظفين.xlsx">تحميل نموذج</a>
     <input type="file" id="fileInput" class="hidden">
     <form id="employeeForm" class="hidden">
-        <label>اسم الموظف: <input type="text" id="name" required></label><br>
-        <label>رقم الاقامة: <input type="text" id="residenceNumber" required></label><br>
-        <label>تاريخ انتهاء الاقامة: <input type="date" id="residenceExpiry" required></label><br>
-        <label>رقم المنشاة:
-            <select id="facilityNumber" required>
-                <option value="7007544575">الثريات - 7007544575</option>
-                <option value="7012640913">الخالدية - 7012640913</option>
-                <option value="7006988013">الكورنيش - 7006988013</option>
-                <option value="1003728258">شخصي ابو جاسر - 1003728258</option>
-                <option value="7014332063">قطر - 7014332063</option>
-                <option value="كفالة زهير الحربش">كفالة زهير الحربش - كفالة زهير الحربش</option>
-                <option value="7016083326">مجمع يتوق الطبي - 7016083326</option>
-                <option value="7007552131">محاسن - 7007552131</option>
-            </select>
-        </label><br>
-        <label>تاريخ انتهاء التامين الصحي: <input type="date" id="insuranceExpiry" required></label><br>
-        <button type="submit">حفظ</button>
+      <label>اسم الموظف: <input type="text" id="name" required></label><br>
+      <label>رقم الاقامة: <input type="text" id="residenceNumber" required></label><br>
+      <label>تاريخ انتهاء الاقامة: <input type="date" id="residenceExpiry" required></label><br>
+      <label>رقم المنشاة:
+        <select id="facilityNumber" required>
+          <option value="7007544575">الثريات - 7007544575</option>
+          <option value="7012640913">الخالدية - 7012640913</option>
+          <option value="7006988013">الكورنيش - 7006988013</option>
+          <option value="1003728258">شخصي ابو جاسر - 1003728258</option>
+          <option value="7014332063">قطر - 7014332063</option>
+          <option value="كفالة زهير الحربش">كفالة زهير الحربش - كفالة زهير الحربش</option>
+          <option value="7016083326">مجمع يتوق الطبي - 7016083326</option>
+          <option value="7007552131">محاسن - 7007552131</option>
+        </select>
+      </label><br>
+      <label>تاريخ انتهاء التامين الصحي: <input type="date" id="insuranceExpiry" required></label><br>
+      <button type="submit">حفظ</button>
     </form>
 
     <h2>بحث</h2>
@@ -186,176 +228,276 @@
 
     <h2>عرض السجلات</h2>
     <table id="employeesTable">
-        <thead>
-            <tr>
-                <th>اسم الموظف</th>
-                <th>رقم الاقامة</th>
-                <th>تاريخ انتهاء الاقامة</th>
-                <th>متبقي (يوم)</th>
-                <th>حالة الاقامة</th>
-                <th>اسم المنشاة</th>
-                <th>رقم المنشاة</th>
-                <th>تاريخ انتهاء التامين الصحي</th>
-                <th>حالة التامين الصحي</th>
-                <th>تعديل/حذف</th>
-            </tr>
-        </thead>
-        <tbody id="employeesTableBody">
-        </tbody>
+      <thead>
+        <tr>
+          <th>اسم الموظف</th>
+          <th>رقم الاقامة</th>
+          <th>تاريخ انتهاء الاقامة</th>
+          <th>متبقي (يوم)</th>
+          <th>حالة الاقامة</th>
+          <th>اسم المنشاة</th>
+          <th>رقم المنشاة</th>
+          <th>تاريخ انتهاء التامين الصحي</th>
+          <th>حالة التامين الصحي</th>
+          <th>تعديل/حذف</th>
+        </tr>
+      </thead>
+      <tbody id="employeesTableBody">
+      </tbody>
     </table>
+  </div>
 
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAL54UVLUZOUKjQ9M8qQSLyP9kLzlDyUII",
-            authDomain: "wagdy-database-work.firebaseapp.com",
-            databaseURL: "https://wagdy-database-work-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "wagdy-database-work",
-            storageBucket: "wagdy-database-work.firebasestorage.app",
-            messagingSenderId: "915577536025",
-            appId: "1:915577536025:web:5bf063a2a9455f1f92f488",
-            measurementId: "G-5HX9G4GB27"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyAL54UVLUZOUKjQ9M8qQSLyP9kLzlDyUII",
+      authDomain: "wagdy-database-work.firebaseapp.com",
+      databaseURL: "https://wagdy-database-work-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "wagdy-database-work",
+      storageBucket: "wagdy-database-work.firebasestorage.app",
+      messagingSenderId: "915577536025",
+      appId: "1:915577536025:web:5bf063a2a9455f1f92f488",
+      measurementId: "G-5HX9G4GB27"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    const employeesRef = ref(database, 'employees');
 
-        const employeesRef = ref(database, 'employees');
+    let currentUser = null;
+    let isAdmin = false;
 
-        document.getElementById('employeeForm').addEventListener('submit', addEmployee);
-        document.getElementById('searchInput').addEventListener('input', filterEmployees);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        checkUserRole(user.email);
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('mainContent').classList.remove('hidden');
+      } else {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('mainContent').classList.add('hidden');
+      }
+    });
 
-        document.getElementById('showFormButton').addEventListener('click', () => {
-            document.getElementById('employeeForm').classList.toggle('hidden');
-        });
+    function checkUserRole(email) {
+      const adminEmails = [
+        'wagdy.gomaa2013@gmail.com',    // قم بتغيير هذا إلى بريدك الإلكتروني الحقيقي الذي سجلته في Firebase
+        'wagdy.gomaa@outlook.com',
+        'wagdy.gomaa2015@gmail.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
+        'zaiton@herbishoptics.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
+        'alherbish_optics@hotmail.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
+      ];
 
-        document.getElementById('importButton').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
-        });
+      const viewOnlyEmails = [
+        'viewer@wagdy.com',   // قم بتغيير هذا إلى بريد المستخدم للمشاهدة فقط
+        'staff@wagdy.com'     // يمكنك إضافة المزيد من البريد الإلكتروني للمشاهدة فقط
+      ];
 
-        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+      console.log('Checking email:', email); // للتأكد من البريد الإلكتروني المستخدم
 
-        document.getElementById('exportButton').addEventListener('click', exportTableToExcel);
+      isAdmin = adminEmails.includes(email);
+      const isViewer = viewOnlyEmails.includes(email);
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    try {
-                        const workbook = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
-                        const sheetName = workbook.SheetNames[0];
-                        const worksheet = workbook.Sheets[sheetName];
-                        const json = XLSX.utils.sheet_to_json(worksheet, {
-                            raw: false,
-                            dateNF: 'yyyy-mm-dd'
-                        });
+      if (!isAdmin && !isViewer) {
+        console.log('Access denied for:', email); // للتحقق من سبب رفض الدخول
+        signOut(auth);
+        alert('غير مصرح لهذا المستخدم بالدخول');
+        return;
+      }
 
-                        if (json.length > 0) {
-                            json.forEach(row => {
-                                const formatDate = (dateStr) => {
-                                    if (!dateStr) return '';
-                                    if (!isNaN(dateStr)) {
-                                        const excelDate = new Date((dateStr - (25567 + 2)) * 86400 * 1000);
-                                        const year = excelDate.getFullYear();
-                                        const month = String(excelDate.getMonth() + 1).padStart(2, '0');
-                                        const day = String(excelDate.getDate()).padStart(2, '0');
-                                        return `${year}-${month}-${day}`;
-                                    }
-                                    // إذا كان التاريخ بتنسيق نصي، تأكد من أن السنة تحتوي على 4 أرقام
-                                    const parts = dateStr.split('-');
-                                    if (parts.length === 3) {
-                                        const year = parts[0].length === 2 ? '20' + parts[0] : parts[0];
-                                        return `${year}-${parts[1]}-${parts[2]}`;
-                                    }
-                                    return dateStr;
-                                };
+      console.log('Access granted as:', isAdmin ? 'admin' : 'viewer'); // لمعرفة نوع الصلاحية
+      updateUIBasedOnRole();
+    }
 
-                                const employee = {
-                                    name: row['اسم الموظف'],
-                                    residenceNumber: row['رقم الاقامة'].toString(),
-                                    residenceExpiry: formatDate(row['تاريخ انتهاء الاقامة']),
-                                    facilityNumber: row['رقم المنشاة'].toString(),
-                                    insuranceExpiry: formatDate(row['تاريخ انتهاء التامين الصحي'])
-                                };
+    function updateUIBasedOnRole() {
+      const editButtons = document.querySelectorAll('.edit-button');
+      const deleteButtons = document.querySelectorAll('.delete-button');
+      const addButton = document.getElementById('showFormButton');
+      const importButton = document.getElementById('importButton');
+      const exportButton = document.getElementById('exportButton');
 
-                                if (employee.name && employee.residenceNumber &&
-                                    employee.residenceExpiry && employee.facilityNumber &&
-                                    employee.insuranceExpiry) {
-                                    push(employeesRef, employee);
-                                } else {
-                                    console.error('بيانات غير مكتملة:', row);
-                                }
-                            });
-                            alert('تم استيراد البيانات بنجاح');
-                        } else {
-                            alert('الملف فارغ أو لا يحتوي على بيانات صحيحة');
-                        }
-                    } catch (error) {
-                        console.error("Error processing file:", error);
-                        alert("حدث خطأ أثناء معالجة الملف. يرجى التأكد من أن الملف بتنسيق صحيح.");
-                    }
+      if (!isAdmin) {
+        editButtons.forEach(btn => btn.style.display = 'none');
+        deleteButtons.forEach(btn => btn.style.display = 'none');
+        if (addButton) addButton.style.display = 'none';
+        if (importButton) importButton.style.display = 'none';
+        if (exportButton) exportButton.style.display = 'none';
+      }
+    }
+
+    document.getElementById('authForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('تم تسجيل الدخول بنجاح:', userCredential.user.email);
+      } catch (error) {
+        console.error('خطأ في تسجيل الدخول:', error);
+        let errorMessage = 'حدث خطأ في تسجيل الدخول';
+
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'البريد الإلكتروني غير مسجل';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'كلمة المرور غير صحيحة';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'البريد الإلكتروني غير صالح';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'تم تعطيل هذا الحساب';
+            break;
+        }
+
+        alert(errorMessage);
+      }
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error('Error signing out:', error);
+      }
+    });
+
+    document.getElementById('employeeForm').addEventListener('submit', addEmployee);
+    document.getElementById('searchInput').addEventListener('input', filterEmployees);
+
+    document.getElementById('showFormButton').addEventListener('click', () => {
+      document.getElementById('employeeForm').classList.toggle('hidden');
+    });
+
+    document.getElementById('importButton').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+    document.getElementById('exportButton').addEventListener('click', exportTableToExcel);
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const workbook = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, {
+              raw: false,
+              dateNF: 'yyyy-mm-dd'
+            });
+
+            if (json.length > 0) {
+              json.forEach(row => {
+                const formatDate = (dateStr) => {
+                  if (!dateStr) return '';
+                  if (!isNaN(dateStr)) {
+                    const excelDate = new Date((dateStr - (25567 + 2)) * 86400 * 1000);
+                    const year = excelDate.getFullYear();
+                    const month = String(excelDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(excelDate.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                  }
+                  const parts = dateStr.split('-');
+                  if (parts.length === 3) {
+                    const year = parts[0].length === 2 ? '20' + parts[0] : parts[0];
+                    return `${year}-${parts[1]}-${parts[2]}`;
+                  }
+                  return dateStr;
                 };
-                reader.onerror = function (ex) {
-                    console.error("File read error:", ex);
-                    alert("حدث خطأ أثناء قراءة الملف");
+
+                const employee = {
+                  name: row['اسم الموظف'],
+                  residenceNumber: row['رقم الاقامة'].toString(),
+                  residenceExpiry: formatDate(row['تاريخ انتهاء الاقامة']),
+                  facilityNumber: row['رقم المنشاة'].toString(),
+                  insuranceExpiry: formatDate(row['تاريخ انتهاء التامين الصحي'])
                 };
-                reader.readAsBinaryString(file);
+
+                if (employee.name && employee.residenceNumber &&
+                  employee.residenceExpiry && employee.facilityNumber &&
+                  employee.insuranceExpiry) {
+                  push(employeesRef, employee);
+                } else {
+                  console.error('بيانات غير مكتملة:', row);
+                }
+              });
+              alert('تم استيراد البيانات بنجاح');
+            } else {
+              alert('الملف فارغ أو لا يحتوي على بيانات صحيحة');
             }
-        }
+          } catch (error) {
+            console.error("Error processing file:", error);
+            alert("حدث خطأ أثناء معالجة الملف. يرجى التأكد من أن الملف بتنسيق صحيح.");
+          }
+        };
+        reader.onerror = function (ex) {
+          console.error("File read error:", ex);
+          alert("حدث خطأ أثناء قراءة الملف");
+        };
+        reader.readAsBinaryString(file);
+      }
+    }
 
-        function exportTableToExcel() {
-            const wb = XLSX.utils.book_new();
-            const data = employees.map(emp => ({
-                'اسم الموظف': emp.name,
-                'رقم الاقامة': emp.residenceNumber,
-                'تاريخ انتهاء الاقامة': emp.residenceExpiry,
-                'رقم المنشاة': emp.facilityNumber,
-                'تاريخ انتهاء التامين الصحي': emp.insuranceExpiry
-            }));
+    function exportTableToExcel() {
+      const wb = XLSX.utils.book_new();
+      const data = employees.map(emp => ({
+        'اسم الموظف': emp.name,
+        'رقم الاقامة': emp.residenceNumber,
+        'تاريخ انتهاء الاقامة': emp.residenceExpiry,
+        'رقم المنشاة': emp.facilityNumber,
+        'تاريخ انتهاء التامين الصحي': emp.insuranceExpiry
+      }));
 
-            const ws = XLSX.utils.json_to_sheet(data);
-            XLSX.utils.book_append_sheet(wb, ws, "بيانات الموظفين");
-            XLSX.writeFile(wb, "بيانات_الموظفين.xlsx");
-        }
+      const ws = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, "بيانات الموظفين");
+      XLSX.writeFile(wb, "بيانات_الموظفين.xlsx");
+    }
 
-        let employees = [];
+    let employees = [];
 
-        function calculateDaysDifference(date) {
-            const today = new Date();
-            const expiryDate = new Date(date);
-            const diffTime = expiryDate - today;
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        }
+    function calculateDaysDifference(date) {
+      const today = new Date();
+      const expiryDate = new Date(date);
+      const diffTime = expiryDate - today;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
 
-        function getStatus(days, threshold) {
-            if (days <= 0) return 'منتهية';
-            if (days <= threshold) return 'على وشك الانتهاء';
-            return 'سارية';
-        }
+    function getStatus(days, threshold) {
+      if (days <= 0) return 'منتهية';
+      if (days <= threshold) return 'على وشك الانتهاء';
+      return 'سارية';
+    }
 
-        function getStatusClass(days, threshold) {
-            if (days <= 0) return 'status-expired';
-            if (days <= threshold) return 'status-soon';
-            return 'status-active';
-        }
+    function getStatusClass(days, threshold) {
+      if (days <= 0) return 'status-expired';
+      if (days <= threshold) return 'status-soon';
+      return 'status-active';
+    }
 
-        function renderEmployees(filteredEmployees) {
-            const tbody = document.getElementById('employeesTableBody');
-            tbody.innerHTML = '';
-            const sortedEmployees = filteredEmployees.sort((a, b) => new Date(a.residenceExpiry) - new Date(b.residenceExpiry));
-            sortedEmployees.forEach(employee => {
-                const residenceDaysLeft = calculateDaysDifference(employee.residenceExpiry);
-                const insuranceDaysLeft = calculateDaysDifference(employee.insuranceExpiry);
+    function renderEmployees(filteredEmployees) {
+      const tbody = document.getElementById('employeesTableBody');
+      tbody.innerHTML = '';
+      const sortedEmployees = filteredEmployees.sort((a, b) => new Date(a.residenceExpiry) - new Date(b.residenceExpiry));
+      sortedEmployees.forEach(employee => {
+        const residenceDaysLeft = calculateDaysDifference(employee.residenceExpiry);
+        const insuranceDaysLeft = calculateDaysDifference(employee.insuranceExpiry);
 
-                const row = document.createElement('tr');
-                const statusClass = getStatusClass(residenceDaysLeft, 7);
-                row.classList.add(statusClass);
+        const row = document.createElement('tr');
+        const statusClass = getStatusClass(residenceDaysLeft, 7);
+        row.classList.add(statusClass);
 
-                row.innerHTML = `
+        row.innerHTML = `
           <td>${employee.name}</td>
           <td>${employee.residenceNumber}</td>
           <td>${employee.residenceExpiry}</td>
@@ -366,54 +508,55 @@
           <td>${employee.insuranceExpiry}</td>
           <td class="${getStatusClass(insuranceDaysLeft, 15)}">${getStatus(insuranceDaysLeft, 15)}</td>
           <td>
-            <button onclick="editEmployee('${employee.id}', this)">تعديل</button>
-            <button onclick="deleteEmployee('${employee.id}')">حذف</button>
+            ${isAdmin ? `
+              <button class="edit-button" onclick="editEmployee('${employee.id}', this)">تعديل</button>
+              <button class="delete-button" onclick="deleteEmployee('${employee.id}')">حذف</button>
+            ` : ''}
           </td>
         `;
-                tbody.appendChild(row);
-            });
-        }
+        tbody.appendChild(row);
+      });
+    }
 
-        function getFacilityName(facilityNumber) {
-            const facilities = {
-                "7007544575": "الثريات",
-                "7012640913": "الخالدية",
-                "7006988013": "الكورنيش",
-                "1003728258": "شخصي ابو جاسر",
-                "7014332063": "قطر",
-                "كفالة زهير الحربش": "كفالة زهير الحربش",
-                "7016083326": "مجمع يتوق الطبي",
-                "7007552131": "محاسن"
-            };
-            return facilities[facilityNumber] || facilityNumber;
-        }
+    function getFacilityName(facilityNumber) {
+      const facilities = {
+        "7007544575": "الثريات",
+        "7012640913": "الخالدية",
+        "7006988013": "الكورنيش",
+        "1003728258": "شخصي ابو جاسر",
+        "7014332063": "قطر",
+        "كفالة زهير الحربش": "كفالة زهير الحربش",
+        "7016083326": "مجمع يتوق الطبي",
+        "7007552131": "محاسن"
+      };
+      return facilities[facilityNumber] || facilityNumber;
+    }
 
-        function addEmployee(event) {
-            event.preventDefault();
-            const employee = {
-                name: document.getElementById('name').value,
-                residenceNumber: document.getElementById('residenceNumber').value,
-                residenceExpiry: document.getElementById('residenceExpiry').value,
-                facilityNumber: document.getElementById('facilityNumber').value,
-                insuranceExpiry: document.getElementById('insuranceExpiry').value
-            };
-            push(employeesRef, employee);
-            document.getElementById('employeeForm').reset();
-            document.getElementById('employeeForm').classList.add('hidden');
-        }
+    function addEmployee(event) {
+      event.preventDefault();
+      const employee = {
+        name: document.getElementById('name').value,
+        residenceNumber: document.getElementById('residenceNumber').value,
+        residenceExpiry: document.getElementById('residenceExpiry').value,
+        facilityNumber: document.getElementById('facilityNumber').value,
+        insuranceExpiry: document.getElementById('insuranceExpiry').value
+      };
+      push(employeesRef, employee);
+      document.getElementById('employeeForm').reset();
+      document.getElementById('employeeForm').classList.add('hidden');
+    }
 
-        window.editEmployee = function (id, button) {
-            // إزالة أي نموذج تعديل موجود
-            const existingEditForm = document.getElementById('editFormRow');
-            if (existingEditForm) {
-                existingEditForm.remove();
-            }
+    window.editEmployee = function (id, button) {
+      const existingEditForm = document.getElementById('editFormRow');
+      if (existingEditForm) {
+        existingEditForm.remove();
+      }
 
-            const employee = employees.find(emp => emp.id === id);
-            const row = button.parentElement.parentElement;
-            const editForm = document.createElement('tr');
-            editForm.id = 'editFormRow';
-            editForm.innerHTML = `
+      const employee = employees.find(emp => emp.id === id);
+      const row = button.parentElement.parentElement;
+      const editForm = document.createElement('tr');
+      editForm.id = 'editFormRow';
+      editForm.innerHTML = `
         <td colspan="10">
           <form id="editForm">
             <input type="hidden" id="editId" value="${employee.id}">
@@ -438,58 +581,58 @@
           </form>
         </td>
       `;
-            row.insertAdjacentElement('afterend', editForm);
+      row.insertAdjacentElement('afterend', editForm);
 
-            document.getElementById('editForm').addEventListener('submit', updateEmployee);
-        };
+      document.getElementById('editForm').addEventListener('submit', updateEmployee);
+    };
 
-        function updateEmployee(event) {
-            event.preventDefault();
-            const id = document.getElementById('editId').value;
-            const updates = {
-                name: document.getElementById('editName').value,
-                residenceNumber: document.getElementById('editResidenceNumber').value,
-                residenceExpiry: document.getElementById('editResidenceExpiry').value,
-                facilityNumber: document.getElementById('editFacilityNumber').value,
-                insuranceExpiry: document.getElementById('editInsuranceExpiry').value
-            };
-            update(ref(database, `employees/${id}`), updates);
-            document.getElementById('editForm').parentElement.remove();
-        }
+    function updateEmployee(event) {
+      event.preventDefault();
+      const id = document.getElementById('editId').value;
+      const updates = {
+        name: document.getElementById('editName').value,
+        residenceNumber: document.getElementById('editResidenceNumber').value,
+        residenceExpiry: document.getElementById('editResidenceExpiry').value,
+        facilityNumber: document.getElementById('editFacilityNumber').value,
+        insuranceExpiry: document.getElementById('editInsuranceExpiry').value
+      };
+      update(ref(database, `employees/${id}`), updates);
+      document.getElementById('editForm').parentElement.remove();
+    }
 
-        window.deleteEmployee = function (id) {
-            if (confirm('هل أنت متأكد من حذف هذا السجل؟')) {
-                remove(ref(database, `employees/${id}`))
-                    .then(() => {
-                        alert('تم حذف السجل بنجاح');
-                    })
-                    .catch(error => {
-                        console.error("Error removing document: ", error);
-                        alert('حدث خطأ أثناء حذف السجل');
-                    });
-            }
-        };
+    window.deleteEmployee = function (id) {
+      if (confirm('هل أنت متأكد من حذف هذا السجل؟')) {
+        remove(ref(database, `employees/${id}`))
+          .then(() => {
+            alert('تم حذف السجل بنجاح');
+          })
+          .catch(error => {
+            console.error("Error removing document: ", error);
+            alert('حدث خطأ أثناء حذف السجل');
+          });
+      }
+    };
 
-        function filterEmployees() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = employees.filter(emp =>
-                emp.name.toLowerCase().includes(query) ||
-                emp.residenceNumber.includes(query) ||
-                emp.facilityNumber.includes(query)
-            );
-            renderEmployees(filtered);
-        }
+    function filterEmployees() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = employees.filter(emp =>
+        emp.name.toLowerCase().includes(query) ||
+        emp.residenceNumber.includes(query) ||
+        emp.facilityNumber.includes(query)
+      );
+      renderEmployees(filtered);
+    }
 
-        onValue(employeesRef, snapshot => {
-            employees = [];
-            snapshot.forEach(childSnapshot => {
-                const employee = childSnapshot.val();
-                employee.id = childSnapshot.key;
-                employees.push(employee);
-            });
-            renderEmployees(employees);
-        });
-    </script>
+    onValue(employeesRef, snapshot => {
+      employees = [];
+      snapshot.forEach(childSnapshot => {
+        const employee = childSnapshot.val();
+        employee.id = childSnapshot.key;
+        employees.push(employee);
+      });
+      renderEmployees(employees);
+    });
+  </script>
 </body>
 
 </html>
