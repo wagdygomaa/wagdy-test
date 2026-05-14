@@ -21,14 +21,12 @@
       background-color: #fff;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       font-size: 14px;
-      /* Reduced font size */
     }
 
     th,
     td {
       border: 1px solid #ddd;
       padding: 4px;
-      /* Further reduced padding */
       text-align: center;
     }
 
@@ -110,7 +108,6 @@
       background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
     }
 
-    /* Responsive Design */
     @media (max-width: 600px) {
       body {
         margin: 10px;
@@ -123,7 +120,6 @@
       th,
       td {
         padding: 4px;
-        /* Further reduced padding for mobile */
       }
 
       input[type="text"],
@@ -212,16 +208,7 @@
       <label>رقم الاقامة: <input type="text" id="residenceNumber" required></label><br>
       <label>تاريخ انتهاء الاقامة: <input type="date" id="residenceExpiry" required></label><br>
       <label>رقم المنشاة:
-        <select id="facilityNumber" required>
-          <option value="7007544575">الثريات (رقم قوى) - 7007544575</option>
-          <option value="7012640913">الخالدية (رقم قوى) - 7012640913</option>
-          <option value="7006988013">الكورنيش (رقم قوى) - 7006988013</option>
-          <option value="1003728258">شخصي ابو جاسر (رقم قوى)- 1003728258</option>
-          <option value="7014332063">قطر (رقم قوى) - 7014332063</option>
-          <option value="كفالة زهير الحربش">كفالة زهير الحربش (رقم قوى)- (رقم المنشاة)/option>
-          <option value="7016083326">مجمع وليد الحربش الطبي (رقم قوى) - 7016083326</option>
-          <option value="7007552131">محاسن (رقم قوى) - 7007552131</option>
-        </select>
+        <select id="facilityNumber" required></select>
       </label><br>
       <label>تاريخ انتهاء التامين الصحي: <input type="date" id="insuranceExpiry" required></label><br>
       <button type="submit">حفظ</button>
@@ -272,6 +259,18 @@
     const auth = getAuth(app);
     const employeesRef = ref(database, 'employees');
 
+    // ⭐ قائمة المنشآت - يمكنك التعديل عليها بحرية
+    const facilitiesList = [
+      { value: "7007544575", name: "الثريات" },
+      { value: "7012640913", name: "الخالدية" },
+      { value: "7006988013", name: "الكورنيش" },
+      { value: "1003728258", name: "شخصي ابو جاسر" },
+      { value: "7014332063", name: "قطر" },
+      { value: "كفالة زهير الحربش", name: "كفالة زهير الحربش" },
+      { value: "7016083326", name: "مجمع وليد الحربش الطبي" },
+      { value: "7007552131", name: "محاسن" }
+    ];
+
     let currentUser = null;
     let isAdmin = false;
 
@@ -289,31 +288,30 @@
 
     function checkUserRole(email) {
       const adminEmails = [
-        'wagdy.gomaa2013@gmail.com',    // قم بتغيير هذا إلى بريدك الإلكتروني الحقيقي الذي سجلته في Firebase
+        'wagdy.gomaa2013@gmail.com',
         'wagdy.gomaa@outlook.com',
-        'wagdy.gomaa2015@gmail.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
-        'zaiton@herbishoptics.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
-        'alherbish_optics@hotmail.com', // يمكنك إضافة المزيد من البريد الإلكتروني للمدراء
+        'wagdy.gomaa2015@gmail.com',
+        'zaiton@herbishoptics.com',
+        'alherbish_optics@hotmail.com',
       ];
 
       const viewOnlyEmails = [
-        'viewer@wagdy.com',   // قم بتغيير هذا إلى بريد المستخدم للمشاهدة فقط
-        'staff@wagdy.com'     // يمكنك إضافة المزيد من البريد الإلكتروني للمشاهدة فقط
+        'viewer@wagdy.com',
+        'staff@wagdy.com'
       ];
 
-      console.log('Checking email:', email); // للتأكد من البريد الإلكتروني المستخدم
-
+      console.log('Checking email:', email);
       isAdmin = adminEmails.includes(email);
       const isViewer = viewOnlyEmails.includes(email);
 
       if (!isAdmin && !isViewer) {
-        console.log('Access denied for:', email); // للتحقق من سبب رفض الدخول
+        console.log('Access denied for:', email);
         signOut(auth);
         alert('غير مصرح لهذا المستخدم بالدخول');
         return;
       }
 
-      console.log('Access granted as:', isAdmin ? 'admin' : 'viewer'); // لمعرفة نوع الصلاحية
+      console.log('Access granted as:', isAdmin ? 'admin' : 'viewer');
       updateUIBasedOnRole();
     }
 
@@ -331,6 +329,22 @@
         if (importButton) importButton.style.display = 'none';
         if (exportButton) exportButton.style.display = 'none';
       }
+    }
+
+    // دالة توليد خيارات المنشأة ديناميكياً
+    function populateFacilitySelect(selectElement, selectedValue = null) {
+      selectElement.innerHTML = facilitiesList.map(f =>
+        `<option value="${f.value}" ${f.value === selectedValue ? 'selected' : ''}>${f.name} - ${f.value}</option>`
+      ).join('');
+    }
+
+    // املأ قائمة المنشأة في نموذج الإضافة عند تحميل الصفحة
+    populateFacilitySelect(document.getElementById('facilityNumber'));
+
+    // دالة الحصول على اسم المنشأة من رقمها
+    function getFacilityName(facilityNumber) {
+      const facility = facilitiesList.find(f => f.value === facilityNumber);
+      return facility ? facility.name : facilityNumber;
     }
 
     document.getElementById('authForm').addEventListener('submit', async (e) => {
@@ -522,20 +536,6 @@
       });
     }
 
-    function getFacilityName(facilityNumber) {
-      const facilities = {
-        "7007544575": "الثريات",
-        "7012640913": "الخالدية",
-        "7006988013": "الكورنيش",
-        "1003728258": "شخصي ابو جاسر",
-        "7014332063": "قطر",
-        "كفالة زهير الحربش": "كفالة زهير الحربش",
-        "7016083326": "مجمع يتوق الطبي",
-        "7007552131": "محاسن"
-      };
-      return facilities[facilityNumber] || facilityNumber;
-    }
-
     function addEmployee(event) {
       event.preventDefault();
       const employee = {
@@ -568,16 +568,7 @@
             <label>رقم الاقامة: <input type="text" id="editResidenceNumber" value="${employee.residenceNumber}" required></label><br>
             <label>تاريخ انتهاء الاقامة: <input type="date" id="editResidenceExpiry" value="${employee.residenceExpiry}" required></label><br>
             <label>رقم المنشاة:
-              <select id="editFacilityNumber" required>
-                <option value="7007544575" ${employee.facilityNumber === "7007544575" ? "selected" : ""}>الثريات - 7007544575</option>
-                <option value="7012640913" ${employee.facilityNumber === "7012640913" ? "selected" : ""}>الخالدية - 7012640913</option>
-                <option value="7006988013" ${employee.facilityNumber === "7006988013" ? "selected" : ""}>الكورنيش - 7006988013</option>
-                <option value="1003728258" ${employee.facilityNumber === "1003728258" ? "selected" : ""}>شخصي ابو جاسر - 1003728258</option>
-                <option value="7014332063" ${employee.facilityNumber === "7014332063" ? "selected" : ""}>قطر - 7014332063</option>
-                <option value="كفالة زهير الحربش" ${employee.facilityNumber === "كفالة زهير الحربش" ? "selected" : ""}>كفالة زهير الحربش - كفالة زهير الحربش</option>
-                <option value="7016083326" ${employee.facilityNumber === "7016083326" ? "selected" : ""}>مجمع يتوق الطبي - 7016083326</option>
-                <option value="7007552131" ${employee.facilityNumber === "7007552131" ? "selected" : ""}>محاسن - 7007552131</option>
-              </select>
+              <select id="editFacilityNumber" required></select>
             </label><br>
             <label>تاريخ انتهاء التامين الصحي: <input type="date" id="editInsuranceExpiry" value="${employee.insuranceExpiry}" required></label><br>
             <button type="submit">تحديث</button>
@@ -586,6 +577,9 @@
         </td>
       `;
       row.insertAdjacentElement('afterend', editForm);
+
+      // املأ قائمة المنشأة في نموذج التعديل مع تحديد القيمة الحالية
+      populateFacilitySelect(document.getElementById('editFacilityNumber'), employee.facilityNumber);
 
       document.getElementById('editForm').addEventListener('submit', updateEmployee);
     };
