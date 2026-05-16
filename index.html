@@ -113,6 +113,64 @@
       background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal.show {
+      display: block;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border: 2px solid #ad486a;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .close-modal {
+      color: #ad486a;
+      float: left;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-modal:hover {
+      color: #8c3b57;
+    }
+
+    .facilities-table {
+      font-size: 13px;
+    }
+
+    .facilities-table td {
+      padding: 8px;
+    }
+
+    .delete-btn-small {
+      background-color: #dc3545;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .edit-btn-small {
+      background-color: #28a745;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
     @media (max-width: 600px) {
       body {
         margin: 10px;
@@ -186,6 +244,14 @@
       left: 20px;
       z-index: 1000;
     }
+
+    .manage-facilities-btn {
+      background-color: #007bff;
+    }
+
+    .manage-facilities-btn:hover {
+      background-color: #0056b3;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
@@ -206,6 +272,7 @@
     <button id="showFormButton">إضافة موظف جديد</button>
     <button id="importButton">استيراد بيانات</button>
     <button id="exportButton">تصدير البيانات</button>
+    <button id="manageFacilitiesButton" class="manage-facilities-btn">إدارة المنشآت</button>
     <a href="نموذج_الموظفين.xlsx" download="نموذج_الموظفين.xlsx">تحميل نموذج</a>
     <input type="file" id="fileInput" class="hidden">
     <form id="employeeForm" class="hidden">
@@ -244,6 +311,35 @@
     </table>
   </div>
 
+  <!-- Modal لإدارة المنشآت -->
+  <div id="facilitiesModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>إدارة المنشآت</h2>
+      <form id="facilitiesForm">
+        <label>اسم المنشاة: <input type="text" id="facilityName" required></label><br>
+        <label>رقم ال 700: <input type="text" id="facility700Number" required></label><br>
+        <label>رقم قوى: <input type="text" id="facilityQowwat"></label><br>
+        <button type="submit">حفظ المنشاة</button>
+        <button type="button" id="clearFacilityForm">مسح</button>
+      </form>
+
+      <h3>قائمة المنشآت الحالية</h3>
+      <table class="facilities-table">
+        <thead>
+          <tr>
+            <th>اسم المنشاة</th>
+            <th>رقم ال 700</th>
+            <th>رقم قوى</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="facilitiesTableBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
@@ -264,24 +360,22 @@
     const database = getDatabase(app);
     const auth = getAuth(app);
     const employeesRef = ref(database, 'employees');
+    const facilitiesRef = ref(database, 'facilities');
 
-    // ⭐ قائمة المنشآت - يمكنك التعديل عليها بحرية
-    const facilitiesList = [
+    // ⭐ قائمة المنشآت الافتراضية
+    let facilitiesList = [
       { value: "7007544575", name: "الثريات", qowwat: "8-1700492" },
       { value: "7012640913", name: "الخالدية", qowwat: "8-1234734" },
       { value: "7006988013", name: "الكورنيش", qowwat: "15-35799" },
       { value: "1003728258", name: "شخصي ابو جاسر", qowwat: "" },
       { value: "7014332063", name: "قطر", qowwat: "8-1311823" },
       { value: "7016083326", name: "مجمع وليد الحربش", qowwat: "8-1948967" },
-      { value: "...", name: "كفالة صخر الحربش", qowwat: "" },
-      { value: "...", name: "كفالة زهير الحربش", qowwat: "" },
-      { value: "...", name: "كفالة هند الحربش", qowwat: "" },
-      { value: "...", name: "صيدلية الحربش", qowwat: "" },
       { value: "7007552131", name: "محاسن", qowwat: "8-1689471" }
     ];
 
     let currentUser = null;
     let isAdmin = false;
+    let editingFacilityId = null;
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -289,6 +383,7 @@
         checkUserRole(user.email);
         document.getElementById('loginForm').classList.add('hidden');
         document.getElementById('mainContent').classList.remove('hidden');
+        loadFacilitiesFromDatabase();
       } else {
         document.getElementById('loginForm').classList.remove('hidden');
         document.getElementById('mainContent').classList.add('hidden');
@@ -330,6 +425,7 @@
       const addButton = document.getElementById('showFormButton');
       const importButton = document.getElementById('importButton');
       const exportButton = document.getElementById('exportButton');
+      const manageFacilitiesButton = document.getElementById('manageFacilitiesButton');
 
       if (!isAdmin) {
         editButtons.forEach(btn => btn.style.display = 'none');
@@ -337,7 +433,23 @@
         if (addButton) addButton.style.display = 'none';
         if (importButton) importButton.style.display = 'none';
         if (exportButton) exportButton.style.display = 'none';
+        if (manageFacilitiesButton) manageFacilitiesButton.style.display = 'none';
       }
+    }
+
+    // تحميل المنشآت من قاعدة البيانات
+    function loadFacilitiesFromDatabase() {
+      onValue(facilitiesRef, snapshot => {
+        if (snapshot.exists()) {
+          facilitiesList = [];
+          snapshot.forEach(childSnapshot => {
+            const facility = childSnapshot.val();
+            facility.id = childSnapshot.key;
+            facilitiesList.push(facility);
+          });
+        }
+        populateFacilitySelect(document.getElementById('facilityNumber'));
+      });
     }
 
     // دالة توليد خيارات المنشأة ديناميكياً
@@ -347,25 +459,104 @@
       ).join('');
     }
 
-    // املأ قائمة المنشأة في نموذج الإضافة عند تحميل الصفحة
-    populateFacilitySelect(document.getElementById('facilityNumber'));
-
-    // دالة الحصول على اسم المنشأة من رقمها
+    // دالة الحصول على اسم المنشأة
     function getFacilityName(facilityNumber) {
       const facility = facilitiesList.find(f => f.value === facilityNumber);
       return facility ? facility.name : facilityNumber;
     }
 
-    // دالة الحصول على رقم قوى من رقم المنشاة
+    // دالة الحصول على رقم قوى
     function getQowwat(facilityNumber) {
       const facility = facilitiesList.find(f => f.value === facilityNumber);
       return facility ? facility.qowwat : '';
     }
 
-    // عند تغيير المنشاة، تحديث رقم قوى تلقائياً
-    document.getElementById('facilityNumber').addEventListener('change', function() {
-      const qowwat = getQowwat(this.value);
-      // يمكنك إضافة حقل مخفي يحتوي على رقم قوى إذا أردت
+    // عرض/إغلاق modal المنشآت
+    const modal = document.getElementById('facilitiesModal');
+    const closeBtn = document.querySelector('.close-modal');
+    const manageFacilitiesBtn = document.getElementById('manageFacilitiesButton');
+
+    manageFacilitiesBtn.addEventListener('click', () => {
+      modal.classList.add('show');
+      renderFacilitiesTable();
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+      document.getElementById('facilitiesForm').reset();
+      editingFacilityId = null;
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+        document.getElementById('facilitiesForm').reset();
+        editingFacilityId = null;
+      }
+    });
+
+    // عرض جدول المنشآت
+    function renderFacilitiesTable() {
+      const tbody = document.getElementById('facilitiesTableBody');
+      tbody.innerHTML = '';
+      facilitiesList.forEach(facility => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${facility.name}</td>
+          <td>${facility.value}</td>
+          <td>${facility.qowwat || '-'}</td>
+          <td>
+            <button class="edit-btn-small" onclick="editFacility('${facility.id || facility.value}')">تعديل</button>
+            <button class="delete-btn-small" onclick="deleteFacility('${facility.id || facility.value}')">حذف</button>
+          </td>
+        `;
+      });
+    }
+
+    // حفظ المنشاة
+    document.getElementById('facilitiesForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('facilityName').value;
+      const value = document.getElementById('facility700Number').value;
+      const qowwat = document.getElementById('facilityQowwat').value;
+
+      if (editingFacilityId) {
+        // تعديل منشاة موجودة
+        await update(ref(database, `facilities/${editingFacilityId}`), { name, value, qowwat });
+        editingFacilityId = null;
+      } else {
+        // إضافة منشاة جديدة
+        const newFacility = { name, value, qowwat };
+        push(facilitiesRef, newFacility);
+      }
+
+      document.getElementById('facilitiesForm').reset();
+      renderFacilitiesTable();
+    });
+
+    // تعديل المنشاة
+    window.editFacility = function(id) {
+      const facility = facilitiesList.find(f => f.id === id || f.value === id);
+      if (facility) {
+        document.getElementById('facilityName').value = facility.name;
+        document.getElementById('facility700Number').value = facility.value;
+        document.getElementById('facilityQowwat').value = facility.qowwat || '';
+        editingFacilityId = id;
+      }
+    };
+
+    // حذف المنشاة
+    window.deleteFacility = function(id) {
+      if (confirm('هل تريد حذف هذه المنشاة؟')) {
+        remove(ref(database, `facilities/${id}`));
+        renderFacilitiesTable();
+      }
+    };
+
+    // مسح نموذج المنشآت
+    document.getElementById('clearFacilityForm').addEventListener('click', () => {
+      document.getElementById('facilitiesForm').reset();
+      editingFacilityId = null;
     });
 
     document.getElementById('authForm').addEventListener('submit', async (e) => {
@@ -607,7 +798,6 @@
       `;
       row.insertAdjacentElement('afterend', editForm);
 
-      // املأ قائمة المنشأة في نموذج التعديل مع تحديد القيمة الحالية
       populateFacilitySelect(document.getElementById('editFacilityNumber'), employee.facilityNumber);
 
       document.getElementById('editForm').addEventListener('submit', updateEmployee);
