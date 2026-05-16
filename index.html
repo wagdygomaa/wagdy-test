@@ -45,6 +45,11 @@
       color: #f57c00;
     }
 
+    .status-critical {
+      background-color: #ffb84d;
+      color: #e65100;
+    }
+
     .status-active {
       background-color: #ccffcc;
       color: #388e3c;
@@ -506,6 +511,13 @@
       return 'status-active';
     }
 
+    function getRowStatusClass(residenceDaysLeft) {
+      if (residenceDaysLeft <= 0) return 'status-expired';
+      if (residenceDaysLeft <= 2) return 'status-critical';
+      if (residenceDaysLeft <= 7) return 'status-soon';
+      return 'status-active';
+    }
+
     function renderEmployees(filteredEmployees) {
       const tbody = document.getElementById('employeesTableBody');
       tbody.innerHTML = '';
@@ -515,15 +527,15 @@
         const insuranceDaysLeft = calculateDaysDifference(employee.insuranceExpiry);
 
         const row = document.createElement('tr');
-        const statusClass = getStatusClass(residenceDaysLeft, 7);
-        row.classList.add(statusClass);
+        const rowStatusClass = getRowStatusClass(residenceDaysLeft);
+        row.classList.add(rowStatusClass);
 
         row.innerHTML = `
           <td>${employee.name}</td>
           <td>${employee.residenceNumber}</td>
           <td>${employee.residenceExpiry}</td>
           <td>${residenceDaysLeft}</td>
-          <td class="${statusClass}">${getStatus(residenceDaysLeft, 7)}</td>
+          <td class="${getStatusClass(residenceDaysLeft, 7)}">${getStatus(residenceDaysLeft, 7)}</td>
           <td>${getFacilityName(employee.facilityNumber)}</td>
           <td>${employee.facilityNumber}</td>
           <td>${employee.insuranceExpiry}</td>
