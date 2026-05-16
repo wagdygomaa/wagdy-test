@@ -231,7 +231,8 @@
           <th>تاريخ انتهاء الاقامة</th>
           <th>متبقي (يوم)</th>
           <th>حالة الاقامة</th>
-          <th>(رقم قوى)اسم المنشاة</th>
+          <th>اسم المنشاة</th>
+          <th>رقم قوى</th>
           <th>رقم ال 700</th>
           <th>تاريخ انتهاء التامين الصحي</th>
           <th>حالة التامين الصحي</th>
@@ -266,17 +267,17 @@
 
     // ⭐ قائمة المنشآت - يمكنك التعديل عليها بحرية
     const facilitiesList = [
-      { value: "7007544575", name: "(8-1700492) الثريات" },
-      { value: "7012640913", name: "(8-1234734) الخالدية" },
-      { value: "7006988013", name: "(15-35799) الكورنيش" },
-      { value: "1003728258", name: "شخصي ابو جاسر" },
-      { value: "7014332063", name: "(8-1311823) قطر" },
-      { value: "7016083326", name: "(8-1948967) مجمع وليد الحربش" },
-      { value: "...", name: "كفالة صخر الحربش" },
-      { value: "...", name: "كفالة زهير الحربش" },
-      { value: "...", name: "كفالة هند الحربش" },
-      { value: "...", name: "صيدلية الحربش" },
-      { value: "7007552131", name: "(8-1689471) محاسن" }
+      { value: "7007544575", name: "الثريات", qowwat: "8-1700492" },
+      { value: "7012640913", name: "الخالدية", qowwat: "8-1234734" },
+      { value: "7006988013", name: "الكورنيش", qowwat: "15-35799" },
+      { value: "1003728258", name: "شخصي ابو جاسر", qowwat: "" },
+      { value: "7014332063", name: "قطر", qowwat: "8-1311823" },
+      { value: "7016083326", name: "مجمع وليد الحربش", qowwat: "8-1948967" },
+      { value: "...", name: "كفالة صخر الحربش", qowwat: "" },
+      { value: "...", name: "كفالة زهير الحربش", qowwat: "" },
+      { value: "...", name: "كفالة هند الحربش", qowwat: "" },
+      { value: "...", name: "صيدلية الحربش", qowwat: "" },
+      { value: "7007552131", name: "محاسن", qowwat: "8-1689471" }
     ];
 
     let currentUser = null;
@@ -342,7 +343,7 @@
     // دالة توليد خيارات المنشأة ديناميكياً
     function populateFacilitySelect(selectElement, selectedValue = null) {
       selectElement.innerHTML = facilitiesList.map(f =>
-        `<option value="${f.value}" ${f.value === selectedValue ? 'selected' : ''}>${f.name} - ${f.value}</option>`
+        `<option value="${f.value}" ${f.value === selectedValue ? 'selected' : ''}>${f.name}</option>`
       ).join('');
     }
 
@@ -354,6 +355,18 @@
       const facility = facilitiesList.find(f => f.value === facilityNumber);
       return facility ? facility.name : facilityNumber;
     }
+
+    // دالة الحصول على رقم قوى من رقم المنشاة
+    function getQowwat(facilityNumber) {
+      const facility = facilitiesList.find(f => f.value === facilityNumber);
+      return facility ? facility.qowwat : '';
+    }
+
+    // عند تغيير المنشاة، تحديث رقم قوى تلقائياً
+    document.getElementById('facilityNumber').addEventListener('change', function() {
+      const qowwat = getQowwat(this.value);
+      // يمكنك إضافة حقل مخفي يحتوي على رقم قوى إذا أردت
+    });
 
     document.getElementById('authForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -537,6 +550,7 @@
           <td>${residenceDaysLeft}</td>
           <td class="${getStatusClass(residenceDaysLeft, 7)}">${getStatus(residenceDaysLeft, 7)}</td>
           <td>${getFacilityName(employee.facilityNumber)}</td>
+          <td>${getQowwat(employee.facilityNumber)}</td>
           <td>${employee.facilityNumber}</td>
           <td>${employee.insuranceExpiry}</td>
           <td class="${getStatusClass(insuranceDaysLeft, 15)}">${getStatus(insuranceDaysLeft, 15)}</td>
@@ -576,7 +590,7 @@
       const editForm = document.createElement('tr');
       editForm.id = 'editFormRow';
       editForm.innerHTML = `
-        <td colspan="10">
+        <td colspan="11">
           <form id="editForm">
             <input type="hidden" id="editId" value="${employee.id}">
             <label>اسم الموظف: <input type="text" id="editName" value="${employee.name}" required></label><br>
