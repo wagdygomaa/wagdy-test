@@ -1,118 +1,83 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل بيانات الموظفين</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>نظام الموظفين والعقود - الجنسية</title>
   <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: 'Almarai', sans-serif;
       margin: 20px;
-      background-color: #f0f0f0;
-      color: #333;
+      background-color: #f0f2f5;
+      color: #1e2a3e;
     }
-
+    .container { max-width: 1400px; margin: 0 auto; }
+    button, .action-btn {
+      padding: 8px 16px;
+      margin: 4px 6px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ad486a;
+      color: white;
+      cursor: pointer;
+      font-family: 'Almarai', sans-serif;
+      font-weight: bold;
+      transition: 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    button:hover { background-color: #8c3b57; transform: translateY(-1px); }
+    .btn-secondary { background-color: #2c7da0; }
+    .btn-secondary:hover { background-color: #1f5e7a; }
+    .btn-outline { background-color: transparent; border: 1px solid #ad486a; color: #ad486a; box-shadow: none; }
+    .btn-outline:hover { background-color: #ad486a10; }
+    .btn-green { background-color: #2e7d32; }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: white;
+      border-radius: 16px;
+      overflow-x: auto;
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 8px;
+      text-align: center;
       font-size: 14px;
     }
-
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 4px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #ad486a;
-      color: white;
-    }
-
-    .status-expired {
-      background-color: #ffcccc;
-      color: #d32f2f;
-    }
-
-    .status-soon {
-      background-color: #fff0b3;
-      color: #f57c00;
-    }
-
-    .status-critical {
-      background-color: #ffb84d;
-      color: #e65100;
-    }
-
-    .status-active {
-      background-color: #ccffcc;
-      color: #388e3c;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    select {
-      padding: 10px;
-      margin: 5px 0;
-      border: 2px solid #ad486a;
-      border-radius: 4px;
-      width: calc(100% - 22px);
-      box-sizing: border-box;
+    th { background-color: #ad486a; color: white; font-weight: 700; }
+    .status-expired { background-color: #ffe5e5; color: #c00; }
+    .status-soon { background-color: #fff3cd; color: #b45f06; }
+    .status-active { background-color: #e6f4ea; color: #2e7d32; }
+    input, select {
+      padding: 8px 12px;
+      margin: 4px 0;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      width: 100%;
       font-family: 'Almarai', sans-serif;
     }
-
-    button {
-      padding: 10px 20px;
-      margin: 5px 0;
-      border: none;
-      border-radius: 4px;
-      background-color: #ad486a;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #8c3b57;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    h1,
-    h2,
-    h3 {
-      color: #ad486a;
-    }
-
     form {
-      background-color: #fff;
+      background: white;
       padding: 20px;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-      margin: 20px auto;
-      border: 2px solid #ad486a;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin: 20px 0;
+      border-right: 5px solid #ad486a;
     }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
+    .hidden { display: none; }
+    .flex-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 15px 0;
     }
-
-    .memphis-pattern {
-      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
-    }
-
     .modal {
       display: none;
       position: fixed;
@@ -121,735 +86,615 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(2px);
+      align-items: center;
+      justify-content: center;
     }
-
-    .modal.show {
-      display: block;
-    }
-
+    .modal.show { display: flex; }
     .modal-content {
-      background-color: #fff;
-      margin: 5% auto;
-      padding: 20px;
-      border: 2px solid #ad486a;
-      border-radius: 8px;
+      background: white;
       width: 90%;
-      max-width: 500px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 550px;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+      border-top: 6px solid #ad486a;
     }
-
     .close-modal {
-      color: #ad486a;
       float: left;
       font-size: 28px;
       font-weight: bold;
+      color: #ad486a;
       cursor: pointer;
     }
-
-    .close-modal:hover {
-      color: #8c3b57;
-    }
-
-    .facilities-table {
-      font-size: 13px;
-    }
-
-    .facilities-table td {
-      padding: 8px;
-    }
-
-    .delete-btn-small {
-      background-color: #dc3545;
-      padding: 5px 10px;
-      font-size: 12px;
-    }
-
-    .edit-btn-small {
-      background-color: #28a745;
-      padding: 5px 10px;
-      font-size: 12px;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        margin: 10px;
-      }
-
-      table {
-        font-size: 14px;
-      }
-
-      th,
-      td {
-        padding: 4px;
-      }
-
-      input[type="text"],
-      input[type="date"],
-      select {
-        width: calc(100% - 20px);
-      }
-
-      button {
-        width: 100%;
-        padding: 10px;
-      }
-
-      form {
-        padding: 15px;
-        margin: 10px auto;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
-
-      h3 {
-        font-size: 18px;
-      }
-    }
-
-    #loginForm {
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    #loginForm input {
-      width: 100%;
-      padding: 8px;
-      margin: 8px 0;
-      border: 1px solid #ad486a;
-      border-radius: 4px;
-      direction: ltr;
-    }
-
-    #mainContent.hidden,
-    #loginForm.hidden {
-      display: none;
-    }
-
     .logout-button {
       position: fixed;
       top: 20px;
       left: 20px;
-      z-index: 1000;
+      z-index: 1100;
+      background-color: #2c3e50;
     }
-
-    .manage-facilities-btn {
-      background-color: #007bff;
+    .memphis-pattern {
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
     }
-
-    .manage-facilities-btn:hover {
-      background-color: #0056b3;
+    @media (max-width: 700px) {
+      th, td { font-size: 12px; padding: 6px 4px; }
+      button { padding: 6px 10px; font-size: 12px; }
+    }
+    .edit-small, .delete-small { padding: 4px 10px; font-size: 12px; }
+    .contract-status-badge {
+      font-weight: bold;
+      border-radius: 20px;
+      padding: 2px 8px;
+      display: inline-block;
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
-
 <body class="memphis-pattern">
+<div class="container" id="appRoot">
+  <!-- شاشة تسجيل الدخول -->
   <div id="loginForm">
-    <h2>تسجيل الدخول</h2>
-    <form id="authForm">
-      <label>البريد الإلكتروني: <input type="email" id="email" required></label><br>
-      <label>كلمة المرور: <input type="password" id="password" required></label><br>
-      <button type="submit">دخول</button>
-    </form>
-  </div>
-
-  <div id="mainContent" class="hidden">
-    <button class="logout-button" id="logoutButton">تسجيل خروج</button>
-    <h1>تسجيل بيانات الموظفين</h1>
-    <button id="showFormButton">إضافة موظف جديد</button>
-    <button id="importButton">استيراد بيانات</button>
-    <button id="exportButton">تصدير البيانات</button>
-    <button id="manageFacilitiesButton" class="manage-facilities-btn">إدارة المنشآت</button>
-    <a href="نموذج_الموظفين.xlsx" download="نموذج_الموظفين.xlsx">تحميل نموذج</a>
-    <input type="file" id="fileInput" class="hidden">
-    <form id="employeeForm" class="hidden">
-      <label>اسم الموظف: <input type="text" id="name" required></label><br>
-      <label>رقم الاقامة: <input type="text" id="residenceNumber" required></label><br>
-      <label>تاريخ انتهاء الاقامة: <input type="date" id="residenceExpiry" required></label><br>
-      <label>رقم المنشاة:
-        <select id="facilityNumber" required></select>
-      </label><br>
-      <label>تاريخ انتهاء التامين الصحي: <input type="date" id="insuranceExpiry" required></label><br>
-      <button type="submit">حفظ</button>
-    </form>
-
-    <h2>بحث</h2>
-    <input type="text" id="searchInput" placeholder="ابحث بالاسم او رقم الاقامة او رقم المنشاة">
-
-    <h2>عرض السجلات</h2>
-    <table id="employeesTable">
-      <thead>
-        <tr>
-          <th>اسم الموظف</th>
-          <th>رقم الاقامة</th>
-          <th>تاريخ انتهاء الاقامة</th>
-          <th>متبقي (يوم)</th>
-          <th>حالة الاقامة</th>
-          <th>اسم المنشاة</th>
-          <th>رقم قوى</th>
-          <th>رقم ال 700</th>
-          <th>تاريخ انتهاء التامين الصحي</th>
-          <th>حالة التامين الصحي</th>
-          <th>تعديل/حذف</th>
-        </tr>
-      </thead>
-      <tbody id="employeesTableBody">
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Modal لإدارة المنشآت -->
-  <div id="facilitiesModal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal">&times;</span>
-      <h2>إدارة المنشآت</h2>
-      <form id="facilitiesForm">
-        <label>اسم المنشاة: <input type="text" id="facilityName" required></label><br>
-        <label>رقم ال 700: <input type="text" id="facility700Number" required></label><br>
-        <label>رقم قوى: <input type="text" id="facilityQowwat"></label><br>
-        <button type="submit">حفظ المنشاة</button>
-        <button type="button" id="clearFacilityForm">مسح</button>
+    <div style="max-width:400px; margin:50px auto; background:white; border-radius:32px; padding:30px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+      <h2 style="color:#ad486a; text-align:center;">تسجيل الدخول</h2>
+      <form id="authForm">
+        <label>البريد الإلكتروني:</label>
+        <input type="email" id="email" required style="direction:ltr">
+        <label>كلمة المرور:</label>
+        <input type="password" id="password" required style="direction:ltr">
+        <button type="submit" style="width:100%; margin-top:15px;">دخول</button>
       </form>
-
-      <h3>قائمة المنشآت الحالية</h3>
-      <table class="facilities-table">
-        <thead>
-          <tr>
-            <th>اسم المنشاة</th>
-            <th>رقم ال 700</th>
-            <th>رقم قوى</th>
-            <th>الإجراءات</th>
-          </tr>
-        </thead>
-        <tbody id="facilitiesTableBody">
-        </tbody>
-      </table>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-    import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+  <!-- المحتوى الرئيسي بعد الدخول -->
+  <div id="mainContent" class="hidden">
+    <button class="logout-button" id="logoutButton">تسجيل خروج</button>
+    
+    <!-- قسم عرض الموظفين (الرئيسي) -->
+    <div id="employeesView" class="view-section">
+      <h1>📋 تسجيل بيانات الموظفين</h1>
+      <div class="flex-btns">
+        <button id="showFormButton">➕ إضافة موظف جديد</button>
+        <button id="importButton">📂 استيراد إكسل</button>
+        <button id="exportButton">📎 تصدير البيانات</button>
+        <button id="manageFacilitiesButton" style="background-color:#0077b6;">🏢 إدارة المنشآت</button>
+        <button id="showContractsButton" style="background-color:#2e7d32;">📅 عقود الموظفين</button>
+        <a href="نموذج_الموظفين.xlsx" download="نموذج_الموظفين.xlsx" style="text-decoration:none;"><button type="button" class="btn-outline">📥 تحميل نموذج</button></a>
+      </div>
+      <input type="file" id="fileInput" class="hidden">
+      <form id="employeeForm" class="hidden">
+        <h3>بيانات الموظف</h3>
+        <label>اسم الموظف: <input type="text" id="name" required></label>
+        <label>رقم الإقامة: <input type="text" id="residenceNumber" required></label>
+        <label>الجنسية: <input type="text" id="nationality" placeholder="مثال: مصري، سعودي، هندي"></label>
+        <label>تاريخ انتهاء الإقامة: <input type="date" id="residenceExpiry" required></label>
+        <label>رقم المنشأة: <select id="facilityNumber" required></select></label>
+        <label>تاريخ انتهاء التأمين الصحي: <input type="date" id="insuranceExpiry" required></label>
+        <button type="submit">💾 حفظ الموظف</button>
+      </form>
+      <input type="text" id="searchInput" placeholder="🔍 بحث بالاسم / رقم الإقامة / رقم المنشأة" style="width:100%; max-width:400px;">
+      <div style="overflow-x: auto;">
+        <table id="employeesTable">
+          <thead>
+            <tr><th>الاسم</th><th>رقم الإقامة</th><th>الجنسية</th><th>انتهاء الإقامة</th><th>متبقي</th><th>حالة الإقامة</th><th>المنشأة</th><th>رقم قوى</th><th>رقم 700</th><th>انتهاء التأمين</th><th>حالة التأمين</th><th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="employeesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAL54UVLUZOUKjQ9M8qQSLyP9kLzlDyUII",
-      authDomain: "wagdy-database-work.firebaseapp.com",
-      databaseURL: "https://wagdy-database-work-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "wagdy-database-work",
-      storageBucket: "wagdy-database-work.firebasestorage.app",
-      messagingSenderId: "915577536025",
-      appId: "1:915577536025:web:5bf063a2a9455f1f92f488",
-      measurementId: "G-5HX9G4GB27"
-    };
+    <!-- قسم العقود (الصفحة الجديدة) -->
+    <div id="contractsView" class="view-section hidden">
+      <div class="flex-btns">
+        <button id="backToEmployeesBtn" class="btn-secondary">↩️ العودة إلى الموظفين</button>
+        <button id="addContractEmployeeBtn" class="btn-green">➕ إضافة موظف جديد (عقود)</button>
+        <h2 style="margin-right:20px;">📄 عقود الموظفين: تواريخ العقد وفترة الإشعار</h2>
+      </div>
+      <div style="background:#fff9f0; padding:12px; border-radius:16px; margin-bottom:15px;">
+        <p style="margin:0;">📌 يمكنك إدارة تواريخ بدء العقد، تاريخ انتهاء العقد، وفترة الإشعار (عدد الأيام) لكل موظف. <strong style="color:#ad486a;">(التعديل متاح للمدير فقط)</strong> | يمكنك إضافة موظف جديد مستقل عن الملف الأساسي.</p>
+      </div>
+      <div style="overflow-x: auto;">
+        <table id="contractsTable">
+          <thead>
+            <tr><th>الاسم</th><th>رقم الإقامة</th><th>الجنسية</th><th>📅 بدء العقد</th><th>⏰ انتهاء العقد</th><th>⚡ فترة الإشعار (يوم)</th><th>📊 الحالة</th><th>الأيام المتبقية</th><th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="contractsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const auth = getAuth(app);
-    const employeesRef = ref(database, 'employees');
-    const facilitiesRef = ref(database, 'facilities');
+  <!-- مودال إدارة المنشآت -->
+  <div id="facilitiesModal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2>إدارة المنشآت</h2><form id="facilitiesForm"><label>اسم المنشأة: <input type="text" id="facilityName" required></label><label>رقم الـ 700: <input type="text" id="facility700Number" required></label><label>رقم قوى: <input type="text" id="facilityQowwat"></label><button type="submit">حفظ المنشأة</button><button type="button" id="clearFacilityForm">مسح</button></form><h3>قائمة المنشآت</h3><table class="facilities-table"><thead><tr><th>الاسم</th><th>رقم 700</th><th>رقم قوى</th><th>إجراءات</th></tr></thead><tbody id="facilitiesTableBody"></tbody></table></div></div>
 
-    // ⭐ قائمة المنشآت الافتراضية
-    let facilitiesList = [
-      { value: "7007544575", name: "الثريات", qowwat: "8-1700492" },
-      { value: "7012640913", name: "الخالدية", qowwat: "8-1234734" },
-      { value: "7006988013", name: "الكورنيش", qowwat: "15-35799" },
-      { value: "1003728258", name: "شخصي ابو جاسر", qowwat: "" },
-      { value: "7014332063", name: "قطر", qowwat: "8-1311823" },
-      { value: "7016083326", name: "مجمع وليد الحربش", qowwat: "8-1948967" },
-      { value: "7007552131", name: "محاسن", qowwat: "8-1689471" }
-    ];
+  <!-- مودال تحرير بيانات العقد -->
+  <div id="contractModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeContractModalBtn">&times;</span>
+      <h3>✏️ تحرير بيانات العقد</h3>
+      <form id="editContractForm">
+        <input type="hidden" id="contractEmployeeId">
+        <label>📅 تاريخ بدء العقد: <input type="date" id="contractStartDate" required></label>
+        <label>⏳ تاريخ انتهاء العقد: <input type="date" id="contractEndDate" required></label>
+        <label>📢 فترة الإشعار (عدد الأيام): <input type="number" id="noticePeriodDays" min="0" value="30" required></label>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="submit" style="background:#2e7d32;">💾 حفظ التعديلات</button>
+          <button type="button" id="cancelContractBtn" class="btn-outline">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    let currentUser = null;
-    let isAdmin = false;
-    let editingFacilityId = null;
+  <!-- مودال إضافة موظف جديد خاص بالعقود (مستقل) -->
+  <div id="addContractEmployeeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeAddContractModal">&times;</span>
+      <h3>➕ إضافة موظف جديد (للعقود فقط)</h3>
+      <form id="newContractEmployeeForm">
+        <label>الاسم الكامل: <input type="text" id="newEmpName" required></label>
+        <label>رقم الإقامة / الهوية: <input type="text" id="newEmpResidence" required></label>
+        <label>الجنسية: <input type="text" id="newEmpNationality" placeholder="مثال: مصري، سعودي" required></label>
+        <label>📅 تاريخ بدء العقد: <input type="date" id="newEmpContractStart" required></label>
+        <label>⏰ تاريخ انتهاء العقد: <input type="date" id="newEmpContractEnd" required></label>
+        <label>⚡ فترة الإشعار (يوم): <input type="number" id="newEmpNoticePeriod" value="30" min="0" required></label>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="submit" style="background:#2e7d32;">💾 إضافة الموظف</button>
+          <button type="button" id="cancelAddContractBtn" class="btn-outline">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUser = user;
-        checkUserRole(user.email);
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('mainContent').classList.remove('hidden');
-        loadFacilitiesFromDatabase();
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+  import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAL54UVLUZOUKjQ9M8qQSLyP9kLzlDyUII",
+    authDomain: "wagdy-database-work.firebaseapp.com",
+    databaseURL: "https://wagdy-database-work-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "wagdy-database-work",
+    storageBucket: "wagdy-database-work.firebasestorage.app",
+    appId: "1:915577536025:web:5bf063a2a9455f1f92f488"
+  };
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const auth = getAuth(app);
+  const employeesRef = ref(database, 'employees');
+  const facilitiesRef = ref(database, 'facilities');
+
+  let facilitiesList = [];
+  let employees = [];
+  let currentUser = null;
+  let isAdmin = false;
+  let editingFacilityId = null;
+
+  // DOM elements
+  const loginDiv = document.getElementById('loginForm');
+  const mainDiv = document.getElementById('mainContent');
+  const employeesViewDiv = document.getElementById('employeesView');
+  const contractsViewDiv = document.getElementById('contractsView');
+  const showContractsBtn = document.getElementById('showContractsButton');
+  const backToEmployeesBtn = document.getElementById('backToEmployeesBtn');
+  const contractModal = document.getElementById('contractModal');
+  const closeContractModal = document.getElementById('closeContractModalBtn');
+  const cancelContractBtn = document.getElementById('cancelContractBtn');
+  const addContractEmployeeBtn = document.getElementById('addContractEmployeeBtn');
+  const addContractModal = document.getElementById('addContractEmployeeModal');
+  const closeAddModal = document.getElementById('closeAddContractModal');
+  const cancelAddBtn = document.getElementById('cancelAddContractBtn');
+
+  // تحميل المنشآت من Firebase
+  function loadFacilitiesFromDB() {
+    onValue(facilitiesRef, (snapshot) => {
+      const list = [];
+      snapshot.forEach(child => {
+        let fac = child.val();
+        fac.id = child.key;
+        list.push(fac);
+      });
+      if (list.length === 0) {
+        const defaultFacs = [
+          { name: "الثريات", value: "7007544575", qowwat: "8-1700492" },
+          { name: "الخالدية", value: "7012640913", qowwat: "8-1234734" },
+          { name: "الكورنيش", value: "7006988013", qowwat: "15-35799" },
+          { name: "شخصي ابو جاسر", value: "1003728258", qowwat: "" },
+          { name: "قطر", value: "7014332063", qowwat: "8-1311823" },
+          { name: "مجمع وليد الحربش", value: "7016083326", qowwat: "8-1948967" },
+          { name: "محاسن", value: "7007552131", qowwat: "8-1689471" }
+        ];
+        defaultFacs.forEach(f => push(facilitiesRef, f));
+        facilitiesList = defaultFacs.map((f, idx) => ({ ...f, id: `temp${idx}` }));
       } else {
-        document.getElementById('loginForm').classList.remove('hidden');
-        document.getElementById('mainContent').classList.add('hidden');
+        facilitiesList = list;
       }
+      populateSelects();
+      renderFacilitiesTableIfVisible();
     });
+  }
 
-    function checkUserRole(email) {
-      const adminEmails = [
-        'wagdy.gomaa2013@gmail.com',
-        'wagdy.gomaa@outlook.com',
-        'wagdy.gomaa2015@gmail.com',
-        'zaiton@herbishoptics.com',
-        'alherbish_optics@hotmail.com',
-      ];
+  function populateSelects() {
+    const facSelect = document.getElementById('facilityNumber');
+    const editFacSelect = document.getElementById('editFacilityNumber');
+    if(facSelect) facSelect.innerHTML = facilitiesList.map(f => `<option value="${f.value}">${f.name}</option>`).join('');
+    if(editFacSelect) editFacSelect.innerHTML = facilitiesList.map(f => `<option value="${f.value}">${f.name}</option>`).join('');
+  }
+  function getFacilityName(val) { let f = facilitiesList.find(f => f.value === val); return f ? f.name : val; }
+  function getQowwat(val) { let f = facilitiesList.find(f => f.value === val); return f ? f.qowwat : ''; }
 
-      const viewOnlyEmails = [
-        'viewer@wagdy.com',
-        'staff@wagdy.com'
-      ];
-
-      console.log('Checking email:', email);
-      isAdmin = adminEmails.includes(email);
-      const isViewer = viewOnlyEmails.includes(email);
-
-      if (!isAdmin && !isViewer) {
-        console.log('Access denied for:', email);
-        signOut(auth);
-        alert('غير مصرح لهذا المستخدم بالدخول');
-        return;
-      }
-
-      console.log('Access granted as:', isAdmin ? 'admin' : 'viewer');
-      updateUIBasedOnRole();
+  // المصادقة والصلاحيات
+  onAuthStateChanged(auth, (user) => {
+    if(user) {
+      currentUser = user;
+      const adminEmails = ['wagdy.gomaa2013@gmail.com','wagdy.gomaa@outlook.com','wagdy.gomaa2015@gmail.com','zaiton@herbishoptics.com','alherbish_optics@hotmail.com'];
+      const viewOnly = ['viewer@wagdy.com','staff@wagdy.com'];
+      isAdmin = adminEmails.includes(user.email);
+      if(!isAdmin && !viewOnly.includes(user.email)) { signOut(auth); alert('غير مصرح'); return; }
+      loginDiv.classList.add('hidden');
+      mainDiv.classList.remove('hidden');
+      employeesViewDiv.classList.remove('hidden');
+      contractsViewDiv.classList.add('hidden');
+      loadFacilitiesFromDB();
+      loadEmployeesRealTime();
+      updateUIPermissions();
+    } else {
+      loginDiv.classList.remove('hidden');
+      mainDiv.classList.add('hidden');
     }
+  });
 
-    function updateUIBasedOnRole() {
-      const editButtons = document.querySelectorAll('.edit-button');
-      const deleteButtons = document.querySelectorAll('.delete-button');
-      const addButton = document.getElementById('showFormButton');
-      const importButton = document.getElementById('importButton');
-      const exportButton = document.getElementById('exportButton');
-      const manageFacilitiesButton = document.getElementById('manageFacilitiesButton');
-
-      if (!isAdmin) {
-        editButtons.forEach(btn => btn.style.display = 'none');
-        deleteButtons.forEach(btn => btn.style.display = 'none');
-        if (addButton) addButton.style.display = 'none';
-        if (importButton) importButton.style.display = 'none';
-        if (exportButton) exportButton.style.display = 'none';
-        if (manageFacilitiesButton) manageFacilitiesButton.style.display = 'none';
-      }
+  function updateUIPermissions() {
+    const addBtn = document.getElementById('showFormButton');
+    const importBtn = document.getElementById('importButton');
+    const exportBtn = document.getElementById('exportButton');
+    const manageFac = document.getElementById('manageFacilitiesButton');
+    const addContractEmpBtn = document.getElementById('addContractEmployeeBtn');
+    if(!isAdmin) {
+      if(addBtn) addBtn.style.display = 'none';
+      if(importBtn) importBtn.style.display = 'none';
+      if(exportBtn) exportBtn.style.display = 'none';
+      if(manageFac) manageFac.style.display = 'none';
+      if(addContractEmpBtn) addContractEmpBtn.style.display = 'none';
+      document.querySelectorAll('.edit-button, .delete-button, .edit-contract-btn').forEach(btn => btn.style.display = 'none');
+    } else {
+      if(addBtn) addBtn.style.display = 'inline-block';
+      if(importBtn) importBtn.style.display = 'inline-block';
+      if(exportBtn) exportBtn.style.display = 'inline-block';
+      if(manageFac) manageFac.style.display = 'inline-block';
+      if(addContractEmpBtn) addContractEmpBtn.style.display = 'inline-block';
     }
+  }
 
-    // تحميل المنشآت من قاعدة البيانات
-    function loadFacilitiesFromDatabase() {
-      onValue(facilitiesRef, snapshot => {
-        if (snapshot.exists()) {
-          facilitiesList = [];
-          snapshot.forEach(childSnapshot => {
-            const facility = childSnapshot.val();
-            facility.id = childSnapshot.key;
-            facilitiesList.push(facility);
-          });
-        }
-        populateFacilitySelect(document.getElementById('facilityNumber'));
-      });
-    }
-
-    // دالة توليد خيارات المنشأة ديناميكياً
-    function populateFacilitySelect(selectElement, selectedValue = null) {
-      selectElement.innerHTML = facilitiesList.map(f =>
-        `<option value="${f.value}" ${f.value === selectedValue ? 'selected' : ''}>${f.name}</option>`
-      ).join('');
-    }
-
-    // دالة الحصول على اسم المنشأة
-    function getFacilityName(facilityNumber) {
-      const facility = facilitiesList.find(f => f.value === facilityNumber);
-      return facility ? facility.name : facilityNumber;
-    }
-
-    // دالة الحصول على رقم قوى
-    function getQowwat(facilityNumber) {
-      const facility = facilitiesList.find(f => f.value === facilityNumber);
-      return facility ? facility.qowwat : '';
-    }
-
-    // عرض/إغلاق modal المنشآت
-    const modal = document.getElementById('facilitiesModal');
-    const closeBtn = document.querySelector('.close-modal');
-    const manageFacilitiesBtn = document.getElementById('manageFacilitiesButton');
-
-    manageFacilitiesBtn.addEventListener('click', () => {
-      modal.classList.add('show');
-      renderFacilitiesTable();
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('show');
-      document.getElementById('facilitiesForm').reset();
-      editingFacilityId = null;
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('show');
-        document.getElementById('facilitiesForm').reset();
-        editingFacilityId = null;
-      }
-    });
-
-    // عرض جدول المنشآت
-    function renderFacilitiesTable() {
-      const tbody = document.getElementById('facilitiesTableBody');
-      tbody.innerHTML = '';
-      facilitiesList.forEach(facility => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
-          <td>${facility.name}</td>
-          <td>${facility.value}</td>
-          <td>${facility.qowwat || '-'}</td>
-          <td>
-            <button class="edit-btn-small" onclick="editFacility('${facility.id || facility.value}')">تعديل</button>
-            <button class="delete-btn-small" onclick="deleteFacility('${facility.id || facility.value}')">حذف</button>
-          </td>
-        `;
-      });
-    }
-
-    // حفظ المنشاة
-    document.getElementById('facilitiesForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('facilityName').value;
-      const value = document.getElementById('facility700Number').value;
-      const qowwat = document.getElementById('facilityQowwat').value;
-
-      if (editingFacilityId) {
-        // تعديل منشاة موجودة
-        await update(ref(database, `facilities/${editingFacilityId}`), { name, value, qowwat });
-        editingFacilityId = null;
-      } else {
-        // إضافة منشاة جديدة
-        const newFacility = { name, value, qowwat };
-        push(facilitiesRef, newFacility);
-      }
-
-      document.getElementById('facilitiesForm').reset();
-      renderFacilitiesTable();
-    });
-
-    // تعديل المنشاة
-    window.editFacility = function(id) {
-      const facility = facilitiesList.find(f => f.id === id || f.value === id);
-      if (facility) {
-        document.getElementById('facilityName').value = facility.name;
-        document.getElementById('facility700Number').value = facility.value;
-        document.getElementById('facilityQowwat').value = facility.qowwat || '';
-        editingFacilityId = id;
-      }
-    };
-
-    // حذف المنشاة
-    window.deleteFacility = function(id) {
-      if (confirm('هل تريد حذف هذه المنشاة؟')) {
-        remove(ref(database, `facilities/${id}`));
-        renderFacilitiesTable();
-      }
-    };
-
-    // مسح نموذج المنشآت
-    document.getElementById('clearFacilityForm').addEventListener('click', () => {
-      document.getElementById('facilitiesForm').reset();
-      editingFacilityId = null;
-    });
-
-    document.getElementById('authForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log('تم تسجيل الدخول بنجاح:', userCredential.user.email);
-      } catch (error) {
-        console.error('خطأ في تسجيل الدخول:', error);
-        let errorMessage = 'حدث خطأ في تسجيل الدخول';
-
-        switch (error.code) {
-          case 'auth/user-not-found':
-            errorMessage = 'البريد الإلكتروني غير مسجل';
-            break;
-          case 'auth/wrong-password':
-            errorMessage = 'كلمة المرور غير صحيحة';
-            break;
-          case 'auth/invalid-email':
-            errorMessage = 'البريد الإلكتروني غير صالح';
-            break;
-          case 'auth/user-disabled':
-            errorMessage = 'تم تعطيل هذا الحساب';
-            break;
-        }
-
-        alert(errorMessage);
-      }
-    });
-
-    document.getElementById('logoutButton').addEventListener('click', async () => {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error('Error signing out:', error);
-      }
-    });
-
-    document.getElementById('employeeForm').addEventListener('submit', addEmployee);
-    document.getElementById('searchInput').addEventListener('input', filterEmployees);
-
-    document.getElementById('showFormButton').addEventListener('click', () => {
-      document.getElementById('employeeForm').classList.toggle('hidden');
-    });
-
-    document.getElementById('importButton').addEventListener('click', () => {
-      document.getElementById('fileInput').click();
-    });
-
-    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
-
-    document.getElementById('exportButton').addEventListener('click', exportTableToExcel);
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          try {
-            const workbook = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const json = XLSX.utils.sheet_to_json(worksheet, {
-              raw: false,
-              dateNF: 'yyyy-mm-dd'
-            });
-
-            if (json.length > 0) {
-              json.forEach(row => {
-                const formatDate = (dateStr) => {
-                  if (!dateStr) return '';
-                  if (!isNaN(dateStr)) {
-                    const excelDate = new Date((dateStr - (25567 + 2)) * 86400 * 1000);
-                    const year = excelDate.getFullYear();
-                    const month = String(excelDate.getMonth() + 1).padStart(2, '0');
-                    const day = String(excelDate.getDate()).padStart(2, '0');
-                    return `${year}-${month}-${day}`;
-                  }
-                  const parts = dateStr.split('-');
-                  if (parts.length === 3) {
-                    const year = parts[0].length === 2 ? '20' + parts[0] : parts[0];
-                    return `${year}-${parts[1]}-${parts[2]}`;
-                  }
-                  return dateStr;
-                };
-
-                const employee = {
-                  name: row['اسم الموظف'],
-                  residenceNumber: row['رقم الاقامة'].toString(),
-                  residenceExpiry: formatDate(row['تاريخ انتهاء الاقامة']),
-                  facilityNumber: row['رقم المنشاة'].toString(),
-                  insuranceExpiry: formatDate(row['تاريخ انتهاء التامين الصحي'])
-                };
-
-                if (employee.name && employee.residenceNumber &&
-                  employee.residenceExpiry && employee.facilityNumber &&
-                  employee.insuranceExpiry) {
-                  push(employeesRef, employee);
-                } else {
-                  console.error('بيانات غير مكتملة:', row);
-                }
-              });
-              alert('تم استيراد البيانات بنجاح');
-            } else {
-              alert('الملف فارغ أو لا يحتوي على بيانات صحيحة');
-            }
-          } catch (error) {
-            console.error("Error processing file:", error);
-            alert("حدث خطأ أثناء معالجة الملف. يرجى التأكد من أن الملف بتنسيق صحيح.");
-          }
-        };
-        reader.onerror = function (ex) {
-          console.error("File read error:", ex);
-          alert("حدث خطأ أثناء قراءة الملف");
-        };
-        reader.readAsBinaryString(file);
-      }
-    }
-
-    function exportTableToExcel() {
-      const wb = XLSX.utils.book_new();
-      const data = employees.map(emp => ({
-        'اسم الموظف': emp.name,
-        'رقم الاقامة': emp.residenceNumber,
-        'تاريخ انتهاء الاقامة': emp.residenceExpiry,
-        'رقم المنشاة': emp.facilityNumber,
-        'تاريخ انتهاء التامين الصحي': emp.insuranceExpiry
-      }));
-
-      const ws = XLSX.utils.json_to_sheet(data);
-      XLSX.utils.book_append_sheet(wb, ws, "بيانات الموظفين");
-      XLSX.writeFile(wb, "بيانات_الموظفين.xlsx");
-    }
-
-    let employees = [];
-
-    function calculateDaysDifference(date) {
-      const today = new Date();
-      const expiryDate = new Date(date);
-      const diffTime = expiryDate - today;
-      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    }
-
-    function getStatus(days, threshold) {
-      if (days <= 0) return 'منتهية';
-      if (days <= threshold) return 'على وشك الانتهاء';
-      return 'سارية';
-    }
-
-    function getStatusClass(days, threshold) {
-      if (days <= 0) return 'status-expired';
-      if (days <= threshold) return 'status-soon';
-      return 'status-active';
-    }
-
-    function getRowStatusClass(residenceDaysLeft) {
-      if (residenceDaysLeft <= 0) return 'status-expired';
-      if (residenceDaysLeft <= 2) return 'status-critical';
-      if (residenceDaysLeft <= 7) return 'status-soon';
-      return 'status-active';
-    }
-
-    function renderEmployees(filteredEmployees) {
-      const tbody = document.getElementById('employeesTableBody');
-      tbody.innerHTML = '';
-      const sortedEmployees = filteredEmployees.sort((a, b) => new Date(a.residenceExpiry) - new Date(b.residenceExpiry));
-      sortedEmployees.forEach(employee => {
-        const residenceDaysLeft = calculateDaysDifference(employee.residenceExpiry);
-        const insuranceDaysLeft = calculateDaysDifference(employee.insuranceExpiry);
-
-        const row = document.createElement('tr');
-        const rowStatusClass = getRowStatusClass(residenceDaysLeft);
-        row.classList.add(rowStatusClass);
-
-        row.innerHTML = `
-          <td>${employee.name}</td>
-          <td>${employee.residenceNumber}</td>
-          <td>${employee.residenceExpiry}</td>
-          <td>${residenceDaysLeft}</td>
-          <td class="${getStatusClass(residenceDaysLeft, 7)}">${getStatus(residenceDaysLeft, 7)}</td>
-          <td>${getFacilityName(employee.facilityNumber)}</td>
-          <td>${getQowwat(employee.facilityNumber)}</td>
-          <td>${employee.facilityNumber}</td>
-          <td>${employee.insuranceExpiry}</td>
-          <td class="${getStatusClass(insuranceDaysLeft, 15)}">${getStatus(insuranceDaysLeft, 15)}</td>
-          <td>
-            ${isAdmin ? `
-              <button class="edit-button" onclick="editEmployee('${employee.id}', this)">تعديل</button>
-              <button class="delete-button" onclick="deleteEmployee('${employee.id}')">حذف</button>
-            ` : ''}
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    function addEmployee(event) {
-      event.preventDefault();
-      const employee = {
-        name: document.getElementById('name').value,
-        residenceNumber: document.getElementById('residenceNumber').value,
-        residenceExpiry: document.getElementById('residenceExpiry').value,
-        facilityNumber: document.getElementById('facilityNumber').value,
-        insuranceExpiry: document.getElementById('insuranceExpiry').value
-      };
-      push(employeesRef, employee);
-      document.getElementById('employeeForm').reset();
-      document.getElementById('employeeForm').classList.add('hidden');
-    }
-
-    window.editEmployee = function (id, button) {
-      const existingEditForm = document.getElementById('editFormRow');
-      if (existingEditForm) {
-        existingEditForm.remove();
-      }
-
-      const employee = employees.find(emp => emp.id === id);
-      const row = button.parentElement.parentElement;
-      const editForm = document.createElement('tr');
-      editForm.id = 'editFormRow';
-      editForm.innerHTML = `
-        <td colspan="11">
-          <form id="editForm">
-            <input type="hidden" id="editId" value="${employee.id}">
-            <label>اسم الموظف: <input type="text" id="editName" value="${employee.name}" required></label><br>
-            <label>رقم الاقامة: <input type="text" id="editResidenceNumber" value="${employee.residenceNumber}" required></label><br>
-            <label>تاريخ انتهاء الاقامة: <input type="date" id="editResidenceExpiry" value="${employee.residenceExpiry}" required></label><br>
-            <label>رقم المنشاة:
-              <select id="editFacilityNumber" required></select>
-            </label><br>
-            <label>تاريخ انتهاء التامين الصحي: <input type="date" id="editInsuranceExpiry" value="${employee.insuranceExpiry}" required></label><br>
-            <button type="submit">تحديث</button>
-            <button type="button" onclick="this.parentElement.parentElement.remove()">إلغاء</button>
-          </form>
-        </td>
-      `;
-      row.insertAdjacentElement('afterend', editForm);
-
-      populateFacilitySelect(document.getElementById('editFacilityNumber'), employee.facilityNumber);
-
-      document.getElementById('editForm').addEventListener('submit', updateEmployee);
-    };
-
-    function updateEmployee(event) {
-      event.preventDefault();
-      const id = document.getElementById('editId').value;
-      const updates = {
-        name: document.getElementById('editName').value,
-        residenceNumber: document.getElementById('editResidenceNumber').value,
-        residenceExpiry: document.getElementById('editResidenceExpiry').value,
-        facilityNumber: document.getElementById('editFacilityNumber').value,
-        insuranceExpiry: document.getElementById('editInsuranceExpiry').value
-      };
-      update(ref(database, `employees/${id}`), updates);
-      document.getElementById('editForm').parentElement.remove();
-    }
-
-    window.deleteEmployee = function (id) {
-      if (confirm('هل أنت متأكد من حذف هذا السجل؟')) {
-        remove(ref(database, `employees/${id}`))
-          .then(() => {
-            alert('تم حذف السجل بنجاح');
-          })
-          .catch(error => {
-            console.error("Error removing document: ", error);
-            alert('حدث خطأ أثناء حذف السجل');
-          });
-      }
-    };
-
-    function filterEmployees() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = employees.filter(emp =>
-        emp.name.toLowerCase().includes(query) ||
-        emp.residenceNumber.includes(query) ||
-        emp.facilityNumber.includes(query)
-      );
-      renderEmployees(filtered);
-    }
-
-    onValue(employeesRef, snapshot => {
+  // تحميل الموظفين مع حقل الجنسية والعقود
+  function loadEmployeesRealTime() {
+    onValue(employeesRef, (snapshot) => {
       employees = [];
-      snapshot.forEach(childSnapshot => {
-        const employee = childSnapshot.val();
-        employee.id = childSnapshot.key;
-        employees.push(employee);
+      snapshot.forEach(child => {
+        let emp = child.val();
+        emp.id = child.key;
+        // حقول الجنسية - إذا لم توجد نجعلها فارغة
+        if(!emp.nationality) emp.nationality = '';
+        if(!emp.contractStart) emp.contractStart = '';
+        if(!emp.contractEnd) emp.contractEnd = '';
+        if(!emp.noticePeriod) emp.noticePeriod = '';
+        // التأكد من وجود حقول الإقامة والتأمين (للموظفين القدامى)
+        if(!emp.residenceExpiry) emp.residenceExpiry = '';
+        if(!emp.insuranceExpiry) emp.insuranceExpiry = '';
+        if(!emp.facilityNumber) emp.facilityNumber = '';
+        employees.push(emp);
       });
-      renderEmployees(employees);
+      renderEmployeesTable();
+      if(contractsViewDiv && !contractsViewDiv.classList.contains('hidden')) {
+        renderContractsTable();
+      }
     });
-  </script>
-</body>
+  }
 
+  // عرض جدول الموظفين الأساسي مع عمود الجنسية
+  function renderEmployeesTable() {
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    let data = employees.filter(emp => 
+      emp.name.toLowerCase().includes(searchTerm) || 
+      emp.residenceNumber?.includes(searchTerm) || 
+      emp.facilityNumber?.includes(searchTerm)
+    );
+    const tbody = document.getElementById('employeesTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    const sorted = [...data].sort((a,b)=> new Date(a.residenceExpiry || '2099-01-01') - new Date(b.residenceExpiry || '2099-01-01'));
+    for(let emp of sorted) {
+      const resDays = emp.residenceExpiry ? Math.ceil((new Date(emp.residenceExpiry) - new Date()) / (1000*3600*24)) : null;
+      const insDays = emp.insuranceExpiry ? Math.ceil((new Date(emp.insuranceExpiry) - new Date()) / (1000*3600*24)) : null;
+      const resStatus = (resDays === null) ? 'غير محدد' : (resDays <= 0 ? 'منتهية' : resDays <= 7 ? 'على وشك الانتهاء' : 'سارية');
+      const insStatus = (insDays === null) ? 'غير محدد' : (insDays <= 0 ? 'منتهية' : insDays <= 15 ? 'على وشك الانتهاء' : 'سارية');
+      const rowClass = (resDays !== null && resDays <= 0) ? 'status-expired' : (resDays !== null && resDays <=2) ? 'status-critical' : (resDays !== null && resDays <=7) ? 'status-soon' : '';
+      const tr = document.createElement('tr');
+      if(rowClass) tr.classList.add(rowClass);
+      tr.innerHTML = `
+        <td>${emp.name}</td>
+        <td>${emp.residenceNumber || '—'}</td>
+        <td>${emp.nationality || '—'}</td>
+        <td>${emp.residenceExpiry || '—'}</td>
+        <td>${resDays !== null ? resDays : '—'}</td>
+        <td class="${resDays !== null && resDays <=0 ? 'status-expired' : (resDays !== null && resDays <=7 ? 'status-soon' : '')}">${resStatus}</td>
+        <td>${getFacilityName(emp.facilityNumber) || '—'}</td>
+        <td>${getQowwat(emp.facilityNumber) || '—'}</td>
+        <td>${emp.facilityNumber || '—'}</td>
+        <td>${emp.insuranceExpiry || '—'}</td>
+        <td class="${insDays !== null && insDays <=0 ? 'status-expired' : (insDays !== null && insDays <=15 ? 'status-soon' : '')}">${insStatus}</td>
+        <td>${isAdmin ? `<button class="edit-button" data-id="${emp.id}">✏️ تعديل</button> <button class="delete-button" data-id="${emp.id}">🗑️ حذف</button>` : '—'}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+    attachEmployeeActionEvents();
+  }
+
+  function attachEmployeeActionEvents() {
+    document.querySelectorAll('.edit-button').forEach(btn => {
+      btn.removeEventListener('click', handleEditClick);
+      btn.addEventListener('click', handleEditClick);
+    });
+    document.querySelectorAll('.delete-button').forEach(btn => {
+      btn.removeEventListener('click', handleDeleteClick);
+      btn.addEventListener('click', handleDeleteClick);
+    });
+  }
+  function handleEditClick(e) { const id = e.currentTarget.getAttribute('data-id'); editEmployeeById(id); }
+  function handleDeleteClick(e) { const id = e.currentTarget.getAttribute('data-id'); if(confirm("حذف الموظف نهائياً؟")) remove(ref(database, `employees/${id}`)); }
+
+  function editEmployeeById(id) {
+    const emp = employees.find(e => e.id === id);
+    if(!emp) return;
+    const existingForm = document.getElementById('dynamicEditRow');
+    if(existingForm) existingForm.remove();
+    const row = document.querySelector(`.edit-button[data-id="${id}"]`)?.closest('tr');
+    if(!row) return;
+    const editRow = document.createElement('tr'); editRow.id = 'dynamicEditRow';
+    editRow.innerHTML = `<td colspan="12"><form id="inlineEditForm"><input type="hidden" id="editId" value="${emp.id}">
+      <label>الاسم: <input type="text" id="editName" value="${emp.name.replace(/"/g, '&quot;')}" required></label>
+      <label>رقم الإقامة: <input type="text" id="editResidenceNumber" value="${emp.residenceNumber || ''}" required></label>
+      <label>الجنسية: <input type="text" id="editNationality" value="${emp.nationality || ''}"></label>
+      <label>انتهاء الإقامة: <input type="date" id="editResidenceExpiry" value="${emp.residenceExpiry || ''}"></label>
+      <label>المنشأة: <select id="editFacilityNumber">${facilitiesList.map(f => `<option value="${f.value}" ${f.value === emp.facilityNumber ? 'selected' : ''}>${f.name}</option>`).join('')}</select></label>
+      <label>انتهاء التأمين: <input type="date" id="editInsuranceExpiry" value="${emp.insuranceExpiry || ''}"></label>
+      <button type="submit">تحديث</button> <button type="button" id="cancelEditBtn">إلغاء</button></form></td>`;
+    row.insertAdjacentElement('afterend', editRow);
+    document.getElementById('inlineEditForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const updates = { 
+        name: document.getElementById('editName').value, 
+        residenceNumber: document.getElementById('editResidenceNumber').value,
+        nationality: document.getElementById('editNationality').value,
+        residenceExpiry: document.getElementById('editResidenceExpiry').value, 
+        facilityNumber: document.getElementById('editFacilityNumber').value, 
+        insuranceExpiry: document.getElementById('editInsuranceExpiry').value 
+      };
+      await update(ref(database, `employees/${emp.id}`), updates);
+      editRow.remove();
+    });
+    document.getElementById('cancelEditBtn').addEventListener('click', () => editRow.remove());
+  }
+
+  // ===================  صفحة العقود ==================
+  function renderContractsTable() {
+    const tbody = document.getElementById('contractsTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    const sorted = [...employees].sort((a,b)=> (a.contractEnd || '9999-12-31').localeCompare(b.contractEnd || '9999-12-31'));
+    for(let emp of sorted) {
+      const startDate = emp.contractStart || '';
+      const endDate = emp.contractEnd || '';
+      const notice = emp.noticePeriod !== undefined && emp.noticePeriod !== '' ? emp.noticePeriod : '—';
+      let statusText = '', statusClass = '', daysLeft = '—';
+      if(endDate) {
+        const today = new Date(); today.setHours(0,0,0,0);
+        const end = new Date(endDate);
+        const diffDays = Math.ceil((end - today) / (1000*3600*24));
+        daysLeft = diffDays;
+        if(diffDays < 0) { statusText = 'منتهي'; statusClass = 'status-expired'; }
+        else if(diffDays <= (parseInt(notice) || 30)) { statusText = 'ينتهي قريباً'; statusClass = 'status-soon'; }
+        else { statusText = 'ساري'; statusClass = 'status-active'; }
+      } else { statusText = 'غير محدد'; statusClass = ''; daysLeft = '—'; }
+      const row = tbody.insertRow();
+      row.innerHTML = `
+        <td>${emp.name}</td>
+        <td>${emp.residenceNumber || '—'}</td>
+        <td>${emp.nationality || '—'}</td>
+        <td>${startDate || '—'}</td>
+        <td>${endDate || '—'}</td>
+        <td>${notice !== '—' ? notice+' يوم' : '—'}</td>
+        <td><span class="contract-status-badge ${statusClass}">${statusText}</span></td>
+        <td>${daysLeft !== '—' ? (daysLeft>=0?daysLeft+' يوم':'منتهي') : '—'}</td>
+        <td>${isAdmin ? `<button class="edit-contract-btn" data-id="${emp.id}" style="background:#0077b6;">✏️ تعديل العقد</button>` : '—'}</td>
+      `;
+    }
+    document.querySelectorAll('.edit-contract-btn').forEach(btn => {
+      btn.removeEventListener('click', contractEditHandler);
+      btn.addEventListener('click', contractEditHandler);
+    });
+  }
+
+  function contractEditHandler(e) {
+    const empId = e.currentTarget.getAttribute('data-id');
+    const employee = employees.find(emp => emp.id === empId);
+    if(employee) {
+      document.getElementById('contractEmployeeId').value = empId;
+      document.getElementById('contractStartDate').value = employee.contractStart || '';
+      document.getElementById('contractEndDate').value = employee.contractEnd || '';
+      document.getElementById('noticePeriodDays').value = employee.noticePeriod !== undefined && employee.noticePeriod !== '' ? employee.noticePeriod : '30';
+      contractModal.classList.add('show');
+    }
+  }
+
+  async function saveContractData() {
+    const empId = document.getElementById('contractEmployeeId').value;
+    const contractStart = document.getElementById('contractStartDate').value;
+    const contractEnd = document.getElementById('contractEndDate').value;
+    let noticePeriod = document.getElementById('noticePeriodDays').value;
+    if(!contractStart || !contractEnd) {
+      alert("يرجى إدخال تاريخ بدء العقد وتاريخ انتهاء العقد");
+      return;
+    }
+    if(new Date(contractEnd) < new Date(contractStart)) { alert("تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء"); return; }
+    noticePeriod = parseInt(noticePeriod) || 0;
+    await update(ref(database, `employees/${empId}`), {
+      contractStart: contractStart,
+      contractEnd: contractEnd,
+      noticePeriod: noticePeriod
+    });
+    contractModal.classList.remove('show');
+  }
+
+  // إضافة موظف جديد خاص بالعقود (مستقل عن باقي الحقول)
+  async function addIndependentContractEmployee(event) {
+    event.preventDefault();
+    const name = document.getElementById('newEmpName').value.trim();
+    const residenceNumber = document.getElementById('newEmpResidence').value.trim();
+    const nationality = document.getElementById('newEmpNationality').value.trim();
+    const contractStart = document.getElementById('newEmpContractStart').value;
+    const contractEnd = document.getElementById('newEmpContractEnd').value;
+    const noticePeriod = parseInt(document.getElementById('newEmpNoticePeriod').value) || 0;
+
+    if (!name || !residenceNumber || !nationality || !contractStart || !contractEnd) {
+      alert('الرجاء تعبئة جميع الحقول: الاسم، رقم الإقامة، الجنسية، تاريخ البدء والانتهاء');
+      return;
+    }
+    if (new Date(contractEnd) < new Date(contractStart)) {
+      alert('تاريخ انتهاء العقد يجب أن يكون بعد تاريخ البدء');
+      return;
+    }
+    // التحقق من عدم تكرار رقم الإقامة (اختياري)
+    const existing = employees.find(emp => emp.residenceNumber === residenceNumber);
+    if (existing) {
+      if (confirm('رقم الإقامة موجود مسبقاً. هل تريد إضافة موظف مكرر؟')) {
+        // السماح بالمتابعة
+      } else return;
+    }
+    const newEmployee = {
+      name: name,
+      residenceNumber: residenceNumber,
+      nationality: nationality,
+      contractStart: contractStart,
+      contractEnd: contractEnd,
+      noticePeriod: noticePeriod,
+      // الحقول الإضافية تترك فارغة أو قيم افتراضية
+      residenceExpiry: '',
+      insuranceExpiry: '',
+      facilityNumber: ''
+    };
+    await push(employeesRef, newEmployee);
+    addContractModal.classList.remove('show');
+    document.getElementById('newContractEmployeeForm').reset();
+    alert('تم إضافة الموظف بنجاح إلى قائمة العقود');
+  }
+
+  // تبديل الأقسام
+  showContractsBtn.addEventListener('click', () => {
+    employeesViewDiv.classList.add('hidden');
+    contractsViewDiv.classList.remove('hidden');
+    renderContractsTable();
+  });
+  backToEmployeesBtn.addEventListener('click', () => {
+    contractsViewDiv.classList.add('hidden');
+    employeesViewDiv.classList.remove('hidden');
+    renderEmployeesTable();
+  });
+
+  // مودال إضافة موظف عقود
+  addContractEmployeeBtn.addEventListener('click', () => {
+    addContractModal.classList.add('show');
+  });
+  function closeAddModalFunc() { addContractModal.classList.remove('show'); }
+  closeAddModal.addEventListener('click', closeAddModalFunc);
+  cancelAddBtn.addEventListener('click', closeAddModalFunc);
+  window.addEventListener('click', (e) => { if(e.target === addContractModal) closeAddModalFunc(); });
+  document.getElementById('newContractEmployeeForm').addEventListener('submit', addIndependentContractEmployee);
+
+  // مودال العقد
+  function closeContractModalFunc() { contractModal.classList.remove('show'); }
+  closeContractModal.addEventListener('click', closeContractModalFunc);
+  cancelContractBtn.addEventListener('click', closeContractModalFunc);
+  window.addEventListener('click', (e) => { if(e.target === contractModal) closeContractModalFunc(); });
+  document.getElementById('editContractForm').addEventListener('submit', async(e)=>{ e.preventDefault(); await saveContractData(); });
+
+  // استمارة إضافة موظف رئيسية (بجنسية)
+  document.getElementById('employeeForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newEmp = {
+      name: document.getElementById('name').value,
+      residenceNumber: document.getElementById('residenceNumber').value,
+      nationality: document.getElementById('nationality').value,
+      residenceExpiry: document.getElementById('residenceExpiry').value,
+      facilityNumber: document.getElementById('facilityNumber').value,
+      insuranceExpiry: document.getElementById('insuranceExpiry').value,
+      contractStart: '', contractEnd: '', noticePeriod: ''
+    };
+    await push(employeesRef, newEmp);
+    document.getElementById('employeeForm').reset();
+    document.getElementById('employeeForm').classList.add('hidden');
+  });
+  document.getElementById('showFormButton')?.addEventListener('click', () => document.getElementById('employeeForm').classList.toggle('hidden'));
+  
+  // استيراد وتصدير مع دعم الجنسية
+  document.getElementById('importButton')?.addEventListener('click', () => document.getElementById('fileInput').click());
+  document.getElementById('fileInput')?.addEventListener('change', handleFileUpload);
+  function handleFileUpload(e) {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const data = new Uint8Array(evt.target.result);
+      const workbook = XLSX.read(data, {type: 'array'});
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet);
+      rows.forEach(row => {
+        const emp = {
+          name: row['اسم الموظف'] || '',
+          residenceNumber: row['رقم الاقامة']?.toString() || '',
+          nationality: row['الجنسية'] || '',
+          residenceExpiry: formatDateExcel(row['تاريخ انتهاء الاقامة']),
+          facilityNumber: row['رقم المنشاة']?.toString() || '',
+          insuranceExpiry: formatDateExcel(row['تاريخ انتهاء التامين الصحي']),
+          contractStart: '', contractEnd: '', noticePeriod: ''
+        };
+        if(emp.name && emp.residenceNumber) push(employeesRef, emp);
+      });
+      alert("تم استيراد البيانات");
+    }; reader.readAsArrayBuffer(file);
+  }
+  function formatDateExcel(val) { if(!val) return ''; if(typeof val === 'number'){ let d = new Date((val-25569)*86400000); return d.toISOString().slice(0,10); } let str = val.toString(); let parts=str.split('-'); if(parts.length===3) return `${parts[0].length===2?'20'+parts[0]:parts[0]}-${parts[1]}-${parts[2]}`; return str; }
+  document.getElementById('exportButton')?.addEventListener('click', () => {
+    const wsData = employees.map(emp => ({
+      'اسم الموظف':emp.name,'رقم الاقامة':emp.residenceNumber,'الجنسية':emp.nationality||'',
+      'تاريخ انتهاء الاقامة':emp.residenceExpiry,'رقم المنشاة':emp.facilityNumber,'تاريخ انتهاء التامين':emp.insuranceExpiry,
+      'تاريخ بدء العقد':emp.contractStart||'','تاريخ انتهاء العقد':emp.contractEnd||'','فترة الإشعار(يوم)':emp.noticePeriod||''
+    }));
+    const ws = XLSX.utils.json_to_sheet(wsData);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"الموظفين والعقود"); XLSX.writeFile(wb,"بيانات_الموظفين_والعقود.xlsx");
+  });
+
+  // إدارة المنشآت
+  const facModal = document.getElementById('facilitiesModal');
+  document.getElementById('manageFacilitiesButton')?.addEventListener('click',()=>facModal.classList.add('show'));
+  document.querySelector('#facilitiesModal .close-modal')?.addEventListener('click',()=>facModal.classList.remove('show'));
+  document.getElementById('facilitiesForm')?.addEventListener('submit', async(e) => {
+    e.preventDefault(); const name=document.getElementById('facilityName').value, value=document.getElementById('facility700Number').value, qowwat=document.getElementById('facilityQowwat').value;
+    if(editingFacilityId) await update(ref(database,`facilities/${editingFacilityId}`),{name,value,qowwat});
+    else await push(facilitiesRef,{name,value,qowwat});
+    document.getElementById('facilitiesForm').reset(); editingFacilityId=null; facModal.classList.remove('show');
+  });
+  window.editFacility=(id)=>{ const f=facilitiesList.find(f=>f.id===id); if(f){ document.getElementById('facilityName').value=f.name; document.getElementById('facility700Number').value=f.value; document.getElementById('facilityQowwat').value=f.qowwat||''; editingFacilityId=id; } };
+  window.deleteFacility=async(id)=>{ if(confirm("حذف المنشأة؟")) await remove(ref(database,`facilities/${id}`)); };
+  function renderFacilitiesTableIfVisible(){ const tbody=document.getElementById('facilitiesTableBody'); if(tbody){ tbody.innerHTML=facilitiesList.map(f=>`<tr><td>${f.name}</td><td>${f.value}</td><td>${f.qowwat||'-'}</td><td><button class="edit-btn-small" onclick="editFacility('${f.id}')">تعديل</button> <button class="delete-btn-small" onclick="deleteFacility('${f.id}')">حذف</button></td></tr>`).join(''); } }
+  document.getElementById('clearFacilityForm')?.addEventListener('click',()=>{ document.getElementById('facilitiesForm').reset(); editingFacilityId=null; });
+  document.getElementById('authForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); const email=document.getElementById('email').value, pass=document.getElementById('password').value; try{ await signInWithEmailAndPassword(auth,email,pass); } catch(err){ alert('فشل تسجيل الدخول: '+err.message); } });
+  document.getElementById('logoutButton')?.addEventListener('click',()=>signOut(auth));
+  document.getElementById('searchInput')?.addEventListener('input',()=>renderEmployeesTable());
+</script>
+</body>
 </html>
